@@ -2,10 +2,10 @@ const THREE = require('three');
 window.THREE = THREE;
 const OrbitControls = require('three-orbit-controls')(THREE);
 import WAGNER from '@superguigui/wagner';
+import Mediator from './Mediator';
+const objLoader = require('three-obj-loader');
+objLoader(THREE);
 
-const OBJLoader = require('three-obj-loader');
-OBJLoader(THREE);
-console.log(typeof THREE.OBJLoader);
 // Passes
 const FXAAPass = require('@superguigui/wagner/src/passes/fxaa/FXAAPASS');
 const VignettePass = require('@superguigui/wagner/src/passes/vignette/VignettePass');
@@ -15,6 +15,9 @@ const Tilt = require('@superguigui/wagner/src/passes/tiltshift/tiltshiftPass');
 import Skybox from './objects/Skybox';
 import Cube from './objects/Cube';
 import Floor from './objects/Floor';
+import LightSide from './LightSide';
+import DarkSide from './DarkSide';
+import SwitchManager from './SwitchManager';
 
 export default class WebGL {
   constructor(params) {
@@ -46,17 +49,24 @@ export default class WebGL {
     this.raycaster = new THREE.Raycaster();
 
     this.scene = new THREE.Scene();
-    this.fog = new THREE.FogExp2(0x00fFFF, 0.01);
-    // this.scene.fog = this.fog;
+    this.fog = new THREE.FogExp2(0x00fFFF, 0.001);
+    this.scene.fog = this.fog;
 
     this.camera = new THREE.PerspectiveCamera(50, params.size.width / params.size.height, 1, 5000);
-    this.camera.position.z = 100;
+    this.camera.position.z = 200;
     this.camera.position.y = 20;
 
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(params.size.width, params.size.height);
     this.renderer.setClearColor(0x262626);
 
+    this.lightSide = new LightSide({ scene: this.scene });
+    this.darkSide = new DarkSide({ scene: this.scene });
+    this.switchManager = new SwitchManager({
+      scene: this.scene,
+      lightSide: this.lightSide,
+      darkSide: this.darkSide,
+    });
 
     this.composer = null;
     this.initPostprocessing();
@@ -91,19 +101,8 @@ export default class WebGL {
   }
   initLights() {
     this.spotLights = [];
-    this.spotLight = new THREE.SpotLight(0xffffff);
-    this.spotLight.position.y = 200;
-    this.scene.add(this.spotLight);
-    const spotLightHelper = new THREE.SpotLightHelper(this.spotLight);
-    this.scene.add(spotLightHelper);
-    this.spotLights.push(this.spotLight);
-
-    this.spotLight2 = new THREE.SpotLight(0xff0000);
-    this.spotLight2.position.y = -200;
-    this.scene.add(this.spotLight2);
-    const spotLightHelper2 = new THREE.SpotLightHelper(this.spotLight2);
-    this.scene.add(spotLightHelper2);
-    this.spotLights.push(this.spotLight2);
+    this.lightSide.initLights({ spotLights: this.spotLights });
+    this.darkSide.initLights({ spotLights: this.spotLights });
   }
   initObjects() {
 
@@ -120,33 +119,30 @@ export default class WebGL {
           console.log(child);
           child.material = new THREE.MeshPhongMaterial({
             shininess: 300,
-            color: 0x000ff0,
+            color: 0xffffff,
             side: THREE.DoubleSide,
           });
           child.geometry.computeFaceNormals();
           child.geometry.computeVertexNormals();
         }
       });
-      object.scale.set(10,10,10)
+      object.scale.set(10, 10, 10);
       object.position.y = 20;
-      const test = object.clone();
-      console.log(test);
-      // console.log(test.material);
-      // test.children[0].material.color = new THREE.Color(0xff0000);
-
-      test.rotation.z = Math.PI/180 * 180;
-      test.position.y = -40;
+      const t = object.clone();
+      t.rotation.z = Math.PI / 180 * 180;
+      t.position.y = -40;
 
       this.scene.add(object);
-      this.scene.add(test);
+      this.scene.add(t);
     });
 
-
+    /* Common */
     this.skybox = new Skybox();
     this.scene.add(this.skybox);
+    /* Sides */
+    this.lightSide.addObjects();
+    this.darkSide.addObjects();
 
-    this.floor = new Floor();
-    // this.scene.add(this.floor);
   }
   initGUI() {
     window.webgl = this;
@@ -223,8 +219,6 @@ export default class WebGL {
       params.open();
       params.add(light, 'distance').min(0).max(500);
 
-
-
     }
 
     // init scene.child GUI
@@ -277,12 +271,9 @@ export default class WebGL {
   keyPress() {}
   keyDown() {}
   keyUp(e) {
-    console.log(e.keyCode);
+    // console.log(e.keyCode);
     if (e.keyCode === 32) {
-      TweenLite.to(this.scene.rotation, 0.4, {
-        x: this.scene.rotation.x + Math.PI / 180 * 180,
-        ease: Quad.easeOut,
-      });
+      Mediator.emit('switch');
     }
   }
   click(x, y, time) {

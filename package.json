@@ -17,6 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "@superguigui/wagner": "^0.1.2",
+    "component-emitter": "^1.2.1",
     "dat-gui": "*",
     "domready": "^1.0.8",
     "fast-url-parser": "^1.1.3",
