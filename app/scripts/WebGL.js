@@ -235,7 +235,7 @@ export default class WebGL {
     }
 
     this.lightSide.update();
-    this.scene.rotation.y += 0.001;
+    // this.scene.rotation.y += 0.001;
   }
   rayCast() {
     this.raycaster.setFromCamera(this.mouse, this.camera);

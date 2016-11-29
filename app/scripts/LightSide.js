@@ -1,6 +1,8 @@
 const THREE = require('three');
 
 import ParticleSystem from './objects/ParticleSystem';
+import SmokeSystem from './objects/SmokeSystem';
+import Candy from './objects/Candy';
 export default class LightSide {
   constructor({ scene, renderer }) {
     this.type = 'lightSide';
@@ -25,7 +27,16 @@ export default class LightSide {
       scene: this.scene,
       renderer: this.renderer,
     });
-    this.scene.add(this.particleSystem);
+    // this.scene.add(this.particleSystem);
+
+    this.smokeSystem = new SmokeSystem({
+      scene: this.scene,
+      renderer: this.renderer,
+    });
+    this.scene.add(this.smokeSystem);
+    this.candy = new Candy();
+    this.candy.position.set(-40, 10, 10);
+    this.scene.add(this.candy);
   }
   on() {
     this.spotLight.distance = 500;
@@ -35,5 +46,6 @@ export default class LightSide {
   }
   update() {
     this.particleSystem.update();
+    this.smokeSystem.update();
   }
 }
