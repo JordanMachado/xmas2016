@@ -3,8 +3,7 @@ window.THREE = THREE;
 const OrbitControls = require('three-orbit-controls')(THREE);
 import WAGNER from '@superguigui/wagner';
 import Mediator from './Mediator';
-const objLoader = require('three-obj-loader');
-objLoader(THREE);
+import Ressources from './Ressources';
 
 // Passes
 const FXAAPass = require('@superguigui/wagner/src/passes/fxaa/FXAAPASS');
@@ -13,8 +12,6 @@ const NoisePass = require('@superguigui/wagner/src/passes/noise/noise');
 const Tilt = require('@superguigui/wagner/src/passes/tiltshift/tiltshiftPass');
 // Objects
 import Skybox from './objects/Skybox';
-import Cube from './objects/Cube';
-import Floor from './objects/Floor';
 import LightSide from './LightSide';
 import DarkSide from './DarkSide';
 import SwitchManager from './SwitchManager';
@@ -102,35 +99,28 @@ export default class WebGL {
   }
   initLights() {
     this.ambiantLight = new THREE.AmbientLight(0xffffff);
-    this.scene.add(this.ambienLight);
+    // this.scene.add(this.ambienLight);
     this.spotLights = [];
     this.lightSide.initLights({ spotLights: this.spotLights });
     this.darkSide.initLights({ spotLights: this.spotLights });
   }
   initObjects() {
 
-    const loader = new THREE.TextureLoader();
-    loader.load('assets/skybox.jpg', (texture) => {
-      this.skybox.mesh.material.map = texture;
+    const object = Ressources.get('obj-planete');
+    object.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.material = new THREE.MeshPhongMaterial({
+          shininess: 300,
+          color: 0xffffff,
+          side: THREE.DoubleSide,
+        });
+        child.geometry.center();
+        child.geometry.computeFaceNormals();
+        child.geometry.computeVertexNormals();
+      }
     });
-
-    const loaderObj = new THREE.OBJLoader();
-    loaderObj.load('assets/Planete.obj', (object) => {
-      object.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          child.material = new THREE.MeshPhongMaterial({
-            shininess: 300,
-            color: 0xffffff,
-            side: THREE.DoubleSide,
-          });
-          child.geometry.computeFaceNormals();
-          child.geometry.computeVertexNormals();
-        }
-      });
-      object.scale.set(10, 10, 10);
-      object.position.y = 20;
-      this.scene.add(object);
-    });
+    object.scale.set(10, 10, 10);
+    this.scene.add(object);
 
     /* Common */
     this.skybox = new Skybox();

@@ -1,10 +1,10 @@
 const THREE = require('three');
-
+import Ressources from '../Ressources';
 export default class Skybox extends THREE.Object3D {
   constructor() {
     super();
     this.mat = new THREE.MeshBasicMaterial({
-      map: new THREE.Texture(),
+      map: Ressources.get('txr-skybox'),
       fog: false,
       // wireframe: true,
       side: THREE.BackSide,

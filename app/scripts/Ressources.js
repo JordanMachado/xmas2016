@@ -1,10 +1,7 @@
-import ResourceLoader from 'resource-loader';
-// import Resource from 'resource-loader/src/Resource';
-// import b64 from 'resource-loader/src/b64';
 import Emitter from 'component-emitter';
 
-import THREE from 'three';
-require('utils/THREE/OBJLoader')(THREE);
+const THREE = require('three');
+require('three-obj-loader')(THREE);
 
 const objLoader = new THREE.OBJLoader();
 
@@ -12,22 +9,22 @@ const objLoader = new THREE.OBJLoader();
 const Url = window.URL || window.webkitURL;
 
 const cache = {};
-
-class Loader extends Emitter {
+window.cache = cache;
+class Ressources extends Emitter {
   constructor() {
     super();
-    this.loader = new ResourceLoader();
+    this.loader = new Loader();
     this.loaded = false;
 
     this._onLoadError = this._onLoadError.bind(this);
     this._onLoadProgress = this._onLoadProgress.bind(this);
     this._onLoadComplete = this._onLoadComplete.bind(this);
-
-    this.loader.on('error', this._onLoadError);
-    this.loader.on('progress', this._onLoadProgress);
-    this.loader.on('complete', this._onLoadComplete);
-    this.loader.before(this.beforeLoad);
-    this.loader.after(this.afterLoad);
+    //
+    this.loader.onError.add(this._onLoadError);
+    this.loader.onProgress.add(this._onLoadProgress);
+    this.loader.onComplete.add(this._onLoadComplete);
+    this.loader.pre(this.beforeLoad);
+    this.loader.use(this.afterLoad);
 
     this.file = cache;
 
@@ -42,11 +39,11 @@ class Loader extends Emitter {
       resource.complete();
     } else {
       // if not cached, wait for complete and store it in the cache.
-      resource.once('complete', function onResourceComplete() {
+      resource.onComplete.add( () => {
         // console.log('beforeLoad2', resource.url, this);
-        cache[this.name] = {};
-        cache[this.name].data = this.data;
-        cache[this.name].type = this.name.split('-')[0];
+        cache[resource.name] = {};
+        cache[resource.name].data = resource.data;
+        cache[resource.name].type = resource.name.split('-')[0];
       });
     }
 
@@ -75,6 +72,7 @@ class Loader extends Emitter {
     switch (type) {
       case 'txr':
         cache[resource.name].resource = new THREE.Texture(resource.data);
+        cache[resource.name].resource.needsUpdate = true
         next();
         break;
       case 'obj':
@@ -108,6 +106,7 @@ class Loader extends Emitter {
   }
 
   get(name) {
+    // return cache[name]
     if (cache[name]) {
       return cache[name].resource || cache[name].data;
     }
@@ -130,8 +129,9 @@ class Loader extends Emitter {
   }
 
   _onLoadError(event) {
+    console.log('errror');
     this.emit('load:error', event);
   }
 }
-const loader = window.loader = new Loader();
-export default loader;
+const ressources = window.ressources = new Ressources();
+export default ressources;
