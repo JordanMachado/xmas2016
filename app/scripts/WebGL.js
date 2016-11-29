@@ -50,7 +50,7 @@ export default class WebGL {
 
     this.scene = new THREE.Scene();
     this.fog = new THREE.FogExp2(0x00fFFF, 0.001);
-    this.scene.fog = this.fog;
+    // this.scene.fog = this.fog;
 
     this.camera = new THREE.PerspectiveCamera(50, params.size.width / params.size.height, 1, 5000);
     this.camera.position.z = 200;
@@ -58,9 +58,10 @@ export default class WebGL {
 
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(params.size.width, params.size.height);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setClearColor(0x262626);
 
-    this.lightSide = new LightSide({ scene: this.scene });
+    this.lightSide = new LightSide({ scene: this.scene, renderer: this.renderer });
     this.darkSide = new DarkSide({ scene: this.scene });
     this.switchManager = new SwitchManager({
       scene: this.scene,
@@ -100,6 +101,8 @@ export default class WebGL {
 
   }
   initLights() {
+    this.ambiantLight = new THREE.AmbientLight(0xffffff);
+    this.scene.add(this.ambienLight);
     this.spotLights = [];
     this.lightSide.initLights({ spotLights: this.spotLights });
     this.darkSide.initLights({ spotLights: this.spotLights });
@@ -111,12 +114,10 @@ export default class WebGL {
       this.skybox.mesh.material.map = texture;
     });
 
-    const test = new THREE.OBJLoader();
-    test.load('assets/Planet.obj', (object) => {
+    const loaderObj = new THREE.OBJLoader();
+    loaderObj.load('assets/Planete.obj', (object) => {
       object.traverse((child) => {
         if (child instanceof THREE.Mesh) {
-          // child.material.map = texture;
-          console.log(child);
           child.material = new THREE.MeshPhongMaterial({
             shininess: 300,
             color: 0xffffff,
@@ -128,12 +129,7 @@ export default class WebGL {
       });
       object.scale.set(10, 10, 10);
       object.position.y = 20;
-      const t = object.clone();
-      t.rotation.z = Math.PI / 180 * 180;
-      t.position.y = -40;
-
       this.scene.add(object);
-      this.scene.add(t);
     });
 
     /* Common */
@@ -248,6 +244,7 @@ export default class WebGL {
       this.renderer.render(this.scene, this.camera);
     }
 
+    this.lightSide.update();
     this.scene.rotation.y += 0.001;
   }
   rayCast() {

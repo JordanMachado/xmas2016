@@ -10,8 +10,10 @@ export default class LightSide {
     this.spotLight = new THREE.SpotLight(0xff0000);
     this.spotLight.position.y = -200;
     this.scene.add(this.spotLight);
-    const spotLightHelper = new THREE.SpotLightHelper(this.spotLight);
-    this.scene.add(spotLightHelper);
+    if (window.DEBUG) {
+      const spotLightHelper = new THREE.SpotLightHelper(this.spotLight);
+      this.scene.add(spotLightHelper);
+    }
     spotLights.push(this.spotLight);
   }
   addObjects() {

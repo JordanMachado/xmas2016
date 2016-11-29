@@ -7,7 +7,7 @@ import dat from 'dat-gui';
 import 'gsap';
 
 // Vars
-window.DEBUG = true;
+window.DEBUG = false;
 let device;
 let webGL;
 
