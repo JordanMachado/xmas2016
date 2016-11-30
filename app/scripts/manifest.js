@@ -4,4 +4,5 @@ export default [
 
   { name: 'obj-candy', url: '/assets/candy.obj' },
   { name: 'txr-smoke', url: '/assets/smoke.png' },
+  { name: 'txr-applat', url: '/assets/applat.jpg' },
 ];

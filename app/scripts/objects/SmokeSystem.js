@@ -9,8 +9,8 @@ export default class ParticleSystem extends THREE.Object3D {
   constructor({ renderer, scene }) {
     super();
 
-    const width = 128;
-    const height = 128;
+    const width = 72;
+    const height = 72;
     this.dataPos = new Float32Array(width * height * 4);
     this.datatInfos = new Float32Array(width * height * 4);
     this.geom = new THREE.BufferGeometry();
@@ -30,20 +30,19 @@ export default class ParticleSystem extends THREE.Object3D {
       '00A8E8',
     ];
     for (let i = 0, l = width * height * 4; i < l; i += 4) {
+
+      this.dataPos[i] = 0;
+      this.dataPos[i + 1] = 0;
+      this.dataPos[i + 2] = Math.random();
+      this.dataPos[i + 3] = Math.random();
+
+      size[count * 3] = Math.random() * 100;
+
       const angle = Math.random() * Math.PI * 2;
-      const radius = Math.random() * 70;
 
-      const x = Math.cos(angle) * radius;
-      const z = Math.sin(angle) * radius;
-      this.dataPos[i] = x;
-      this.dataPos[i + 1] = Math.random() * 90;
-      this.dataPos[i + 2] = z;
-
-      size[count * 3] = Math.random() * 40;
-
-      this.datatInfos[i] = Math.random() * 0.1;
-      this.datatInfos[i + 1] = Math.random() * 0.5;
-      this.datatInfos[i + 2] = Math.random();
+      this.datatInfos[i] = Math.cos(angle);
+      this.datatInfos[i + 1] = Math.random();
+      this.datatInfos[i + 2] = Math.sin(angle);
 
       uvs[count * 2 + 0] = (count % width) / width;
       uvs[count * 2 + 1] = Math.floor(count / width) / height;
@@ -113,8 +112,8 @@ export default class ParticleSystem extends THREE.Object3D {
           value: this.textureDataPos,
         },
       },
-      vertexShader: glslify('../shaders/snow/simulation.vert'),
-      fragmentShader: glslify('../shaders/snow/position.frag'),
+      vertexShader: glslify('../shaders/smoke/simulation.vert'),
+      fragmentShader: glslify('../shaders/smoke/position.frag'),
     });
 
     this.positionsFBO = new THREE.FBOUtils(width, renderer, this.positionShader);
@@ -143,11 +142,13 @@ export default class ParticleSystem extends THREE.Object3D {
     };
     this.mat = new THREE.ShaderMaterial({
       uniforms: this.uniforms,
-      vertexShader: glslify('../shaders/snow/index.vert'),
-      fragmentShader: glslify('../shaders/snow/index.frag'),
-      blending: THREE.AdditiveBlending,
+      vertexShader: glslify('../shaders/smoke/index.vert'),
+      fragmentShader: glslify('../shaders/smoke/index.frag'),
+      // blending: THREE.AdditiveBlending,
       transparent: true,
-      depthTest: false,
+      alphaTest: 0.5,
+      // depthTest: false,
+      depthWrite: false,
     });
 
 
@@ -165,7 +166,6 @@ export default class ParticleSystem extends THREE.Object3D {
     const tmp = this.positionsFBO.in;
     this.positionsFBO.in = this.positionsFBO.out;
     this.positionsFBO.out = tmp;
-
 
     this.positionShader.uniforms.tick.value = this.tick;
     this.positionShader.uniforms.tPositions.value = this.positionsFBO.in;

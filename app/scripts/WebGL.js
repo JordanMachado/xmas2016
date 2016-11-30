@@ -65,13 +65,14 @@ export default class WebGL {
       lightSide: this.lightSide,
       darkSide: this.darkSide,
     });
-
+    this.scene.rotation.y = 2
     this.composer = null;
     this.initPostprocessing();
     this.initLights();
     this.initObjects();
     this.controls = new OrbitControls(this.camera);
     this.controls.enabled = this.params.controls;
+    this.tick = 0;
 
     if (window.DEBUG || window.DEVMODE) this.initGUI();
 
@@ -85,6 +86,8 @@ export default class WebGL {
     this.fxaaPass = new FXAAPass();
     this.passes.push(this.fxaaPass);
     this.noisePass = new NoisePass();
+    this.noisePass.params.amount = 0.04;
+    this.noisePass.params.speed = 0.4;
     this.passes.push(this.noisePass);
     this.vignettePass = new VignettePass({});
     this.passes.push(this.vignettePass);
@@ -98,21 +101,24 @@ export default class WebGL {
 
   }
   initLights() {
-    this.ambiantLight = new THREE.AmbientLight(0xffffff);
-    // this.scene.add(this.ambienLight);
+
+    // const directionalLight2 = new THREE.DirectionalLight( 0xff00ff, 0.1 );
+    // directionalLight2.position.set( 0, -1, 0 );
+    // this.scene.add(directionalLight2);
     this.spotLights = [];
     this.lightSide.initLights({ spotLights: this.spotLights });
     this.darkSide.initLights({ spotLights: this.spotLights });
   }
   initObjects() {
 
-    const object = Ressources.get('obj-planete');
+    const object = this.planet = Ressources.get('obj-planete');
     object.traverse((child) => {
       if (child instanceof THREE.Mesh) {
         child.material = new THREE.MeshPhongMaterial({
           shininess: 300,
           color: 0xffffff,
           side: THREE.DoubleSide,
+          // map: Ressources.get('txr-applat')
         });
         child.geometry.center();
         child.geometry.computeFaceNormals();
@@ -233,9 +239,14 @@ export default class WebGL {
     } else {
       this.renderer.render(this.scene, this.camera);
     }
-
-    this.lightSide.update();
+    this.tick += 0.01;
+    // this.scene.position.x = Math.cos(this.tick * 1.5);
+    // this.scene.position.y = Math.sin(this.tick * 2);
     // this.scene.rotation.y += 0.001;
+
+    this.switchManager.update();
+    this.lightSide.update();
+
   }
   rayCast() {
     this.raycaster.setFromCamera(this.mouse, this.camera);

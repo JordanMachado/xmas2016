@@ -13,6 +13,9 @@ export default class LightSide {
   }
   initLights({ spotLights }) {
 
+    const directionalLight = new THREE.DirectionalLight(0x5e9bff, 0.1);
+    directionalLight.position.set(0, 1, 0);
+    this.scene.add(directionalLight);
     this.spotLight = new THREE.SpotLight(0xffffff);
     this.spotLight.position.y = 200;
     this.scene.add(this.spotLight);
@@ -35,11 +38,11 @@ export default class LightSide {
     });
     this.scene.add(this.smokeSystem);
     this.candy = new Candy();
-    this.candy.position.set(-40, 10, 10);
+    this.candy.position.set(-40, 12, -26);
     this.scene.add(this.candy);
   }
   on() {
-    this.spotLight.distance = 500;
+    this.spotLight.distance = 0;
   }
   off() {
     this.spotLight.distance = 1;

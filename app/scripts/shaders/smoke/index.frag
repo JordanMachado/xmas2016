@@ -1,4 +1,5 @@
 varying vec3 vColor;
+varying vec4 vBuffer;
 
 uniform sampler2D tSmoke;
 void main() {
@@ -8,7 +9,7 @@ void main() {
 	// }
 	vec4 smokeColor = texture2D(tSmoke, gl_PointCoord);
   float depth = smoothstep( 800.0, -800.0, gl_FragCoord.z / gl_FragCoord.w );
-	gl_FragColor = vec4(smokeColor.xyz, depth);
+	gl_FragColor = vec4(smokeColor.xyz,vBuffer.a *smokeColor.w);
 	// gl_FragColor = vec4(vColor, depth);
 
 }

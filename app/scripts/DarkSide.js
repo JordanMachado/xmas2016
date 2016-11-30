@@ -7,6 +7,10 @@ export default class LightSide {
     this.objects = [];
   }
   initLights({ spotLights }) {
+    const directionalLight = new THREE.DirectionalLight(0xd95eff, 0.1);
+    directionalLight.position.set(0, -1, 0);
+    this.scene.add(directionalLight);
+
     this.spotLight = new THREE.SpotLight(0xff0000);
     this.spotLight.position.y = -200;
     this.scene.add(this.spotLight);
@@ -20,7 +24,7 @@ export default class LightSide {
 
   }
   on() {
-    this.spotLight.distance = 500;
+    this.spotLight.distance = 0;
   }
   off() {
     this.spotLight.distance = 1;

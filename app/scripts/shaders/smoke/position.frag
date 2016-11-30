@@ -15,12 +15,15 @@ void main() {
       vec4 opos = texture2D(origin, vUv);
       vec4 pos = texture2D(tPositions, vUv);
       vec4 infos = texture2D(tInfos, vUv);
-      float speedX = infos.x;
-      float speedY = infos.y;
-      pos.y -= speedY;
-      pos.x += cos(tick) * speedX;
-      if (pos.y < -90.0) {
-        pos.y = opos.y;
+      float life = pos.a;
+      life-= 0.001;
+      if(life< 0.0) {
+        life = 1.0;
+          pos.xyz = opos.xyz;
       }
-      gl_FragColor = vec4(pos.xyz,1.0);
+      pos.x += infos.x * 0.02;
+      pos.y += infos.y * 0.5;
+      pos.z += infos.z * 0.02;
+
+      gl_FragColor = vec4(pos.xyz,life);
 }

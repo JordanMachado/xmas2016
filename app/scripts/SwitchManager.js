@@ -17,6 +17,10 @@ export default class SwitchManager {
       src: 'assets/jingl.mp3',
       volume: 0.5,
     });
+    this.analyserLight = sono.effect.analyser({
+      fftSize: 1024,
+      smoothingTimeConstant: 0.7,
+    });
     this.soundLight.play();
     this.soundDark = sono.createSound({
       id: 'dark',
@@ -46,5 +50,16 @@ export default class SwitchManager {
       this.soundDark.fade(0.5, 0.4);
       this.soundLight.fade(0, 0.4);
     }
+  }
+  update() {
+    const lightFreq = this.analyserLight.getFrequencies();
+    let total = 0;
+    for (let i = 0; i < lightFreq.length; i++) {
+      const magnitude = lightFreq[i];
+      total += magnitude / 256;
+    }
+    Mediator.emit('freqLight:update', {
+      total,
+    });
   }
 }
