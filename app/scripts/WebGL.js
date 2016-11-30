@@ -118,7 +118,7 @@ export default class WebGL {
           shininess: 300,
           color: 0xffffff,
           side: THREE.DoubleSide,
-          // map: Ressources.get('txr-applat')
+          map: Ressources.get('txr-ao')
         });
         child.geometry.center();
         child.geometry.computeFaceNormals();
