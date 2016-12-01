@@ -31,7 +31,7 @@ export default class ParticleSystem extends THREE.Object3D {
     ];
     for (let i = 0, l = width * height * 4; i < l; i += 4) {
 
-      this.dataPos[i] = 0;
+      this.dataPos[i] = Math.random();
       this.dataPos[i + 1] = 0;
       this.dataPos[i + 2] = Math.random();
       this.dataPos[i + 3] = Math.random();
@@ -41,7 +41,7 @@ export default class ParticleSystem extends THREE.Object3D {
       const angle = Math.random() * Math.PI * 2;
 
       this.datatInfos[i] = Math.cos(angle);
-      this.datatInfos[i + 1] = Math.random();
+      this.datatInfos[i + 1] = Math.random() * 0.5;
       this.datatInfos[i + 2] = Math.sin(angle);
 
       uvs[count * 2 + 0] = (count % width) / width;

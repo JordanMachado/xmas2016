@@ -16,14 +16,14 @@ void main() {
       vec4 pos = texture2D(tPositions, vUv);
       vec4 infos = texture2D(tInfos, vUv);
       float life = pos.a;
-      life-= 0.001;
+      life-= 0.01;
       if(life< 0.0) {
         life = 1.0;
           pos.xyz = opos.xyz;
       }
-      pos.x += infos.x * 0.02;
-      pos.y += infos.y * 0.5;
-      pos.z += infos.z * 0.02;
+      pos.x += infos.x * 0.2;
+      pos.y -= infos.y;
+      pos.z += infos.z * 0.2;
 
       gl_FragColor = vec4(pos.xyz,life);
 }

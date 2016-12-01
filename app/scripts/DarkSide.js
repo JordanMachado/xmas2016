@@ -1,8 +1,11 @@
 const THREE = require('three');
-export default class LightSide {
-  constructor({ scene }) {
+import SmokeSystem from './objects/SmokeSystem';
+
+export default class DarkSide {
+  constructor({ scene, renderer }) {
     this.type = 'lightSide';
     this.scene = scene;
+    this.renderer = renderer;
     this.lights = [];
     this.objects = [];
   }
@@ -21,6 +24,11 @@ export default class LightSide {
     spotLights.push(this.spotLight);
   }
   addObjects() {
+    this.smokeSystem = new SmokeSystem({
+      scene: this.scene,
+      renderer: this.renderer,
+    });
+    this.scene.add(this.smokeSystem);
 
   }
   on() {
@@ -30,6 +38,7 @@ export default class LightSide {
     this.spotLight.distance = 1;
   }
   update() {
+    this.smokeSystem.update();
 
   }
 }

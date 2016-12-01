@@ -1,8 +1,7 @@
 const THREE = require('three');
 
 import ParticleSystem from './objects/ParticleSystem';
-import SmokeSystem from './objects/SmokeSystem';
-import Candy from './objects/Candy';
+import ReactiveObject from './objects/ReactiveObject';
 export default class LightSide {
   constructor({ scene, renderer }) {
     this.type = 'lightSide';
@@ -30,14 +29,10 @@ export default class LightSide {
       scene: this.scene,
       renderer: this.renderer,
     });
-    // this.scene.add(this.particleSystem);
+    this.scene.add(this.particleSystem);
 
-    this.smokeSystem = new SmokeSystem({
-      scene: this.scene,
-      renderer: this.renderer,
-    });
-    this.scene.add(this.smokeSystem);
-    this.candy = new Candy();
+
+    this.candy = new ReactiveObject({ type: 'sapin'});
     this.candy.position.set(-40, 12, -26);
     this.scene.add(this.candy);
   }
@@ -49,6 +44,5 @@ export default class LightSide {
   }
   update() {
     this.particleSystem.update();
-    this.smokeSystem.update();
   }
 }

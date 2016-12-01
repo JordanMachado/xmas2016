@@ -19,7 +19,7 @@ void main() {
       float speedY = infos.y;
       pos.y -= speedY;
       pos.x += cos(tick) * speedX;
-      if (pos.y < -90.0) {
+      if (pos.y < 0.0) {
         pos.y = opos.y;
       }
       gl_FragColor = vec4(pos.xyz,1.0);

@@ -59,7 +59,7 @@ export default class WebGL {
     this.renderer.setClearColor(0x262626);
 
     this.lightSide = new LightSide({ scene: this.scene, renderer: this.renderer });
-    this.darkSide = new DarkSide({ scene: this.scene });
+    this.darkSide = new DarkSide({ scene: this.scene, renderer: this.renderer });
     this.switchManager = new SwitchManager({
       scene: this.scene,
       lightSide: this.lightSide,
@@ -102,9 +102,8 @@ export default class WebGL {
   }
   initLights() {
 
-    // const directionalLight2 = new THREE.DirectionalLight( 0xff00ff, 0.1 );
-    // directionalLight2.position.set( 0, -1, 0 );
-    // this.scene.add(directionalLight2);
+    const ambient = new THREE.AmbientLight(0xffffff, 0.2);
+    this.scene.add(ambient);
     this.spotLights = [];
     this.lightSide.initLights({ spotLights: this.spotLights });
     this.darkSide.initLights({ spotLights: this.spotLights });
@@ -112,13 +111,16 @@ export default class WebGL {
   initObjects() {
 
     const object = this.planet = Ressources.get('obj-planete');
+    const normal = Ressources.get('txr-normal');
+    normal.wrapS = normal.wrapT = THREE.RepeatWrapping;
+    // normal.repeat.set( 100, 100 );
     object.traverse((child) => {
       if (child instanceof THREE.Mesh) {
         child.material = new THREE.MeshPhongMaterial({
           shininess: 300,
           color: 0xffffff,
           side: THREE.DoubleSide,
-          map: Ressources.get('txr-ao')
+          map: Ressources.get('txr-ao'),
         });
         child.geometry.center();
         child.geometry.computeFaceNormals();
@@ -240,12 +242,13 @@ export default class WebGL {
       this.renderer.render(this.scene, this.camera);
     }
     this.tick += 0.01;
-    // this.scene.position.x = Math.cos(this.tick * 1.5);
-    // this.scene.position.y = Math.sin(this.tick * 2);
+    this.scene.position.x = Math.cos(this.tick * 1.5);
+    this.scene.position.y = Math.sin(this.tick * 2);
     // this.scene.rotation.y += 0.001;
 
     this.switchManager.update();
     this.lightSide.update();
+    this.darkSide.update();
 
   }
   rayCast() {

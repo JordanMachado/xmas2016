@@ -6,13 +6,16 @@ export default class Skybox extends THREE.Object3D {
   constructor() {
     super();
     this.candys = new THREE.Group();
-    const object = this.object = Ressources.get('obj-candy');
+    const object = this.object = Ressources.get('obj-cadeau');
     object.traverse((child) => {
       if (child instanceof THREE.Mesh) {
         child.material = new THREE.MeshPhongMaterial({
-          shininess: 300,
+          shininess: 3000,
           color: 0xffffff,
           side: THREE.DoubleSide,
+          map: Ressources.get('txr-cadeau'),
+          aoMap: Ressources.get('txr-cadeauao'),
+          aoMapIntensity: 0.1,
         });
         child.geometry.center();
         child.geometry.computeFaceNormals();
@@ -20,16 +23,16 @@ export default class Skybox extends THREE.Object3D {
       }
     });
     this.candys.add(object);
-    object.scale.set(10, 10, 10);
-    for (let i = 0; i < 5; i++) {
-      const t = object.clone();
-      t.position.set(Math.random() * 20, 0, Math.random() * 20);
-      const r = Math.random() * 5 + 5;
-      t.scale.set(r, r, r);
-
-      t.rotation.set(0, Math.random() * Math.PI * 2, Math.random() * Math.PI / 4);
-      this.candys.add(t);
-    }
+    object.scale.set(0.1, 0.1, 0.1);
+    // for (let i = 0; i < 5; i++) {
+    //   const t = object.clone();
+    //   t.position.set(Math.random() * 20, 0, Math.random() * 20);
+    //   const r = Math.random() * 5 + 5;
+    //   t.scale.set(r, r, r);
+    //
+    //   t.rotation.set(0, Math.random() * Math.PI * 2, Math.random() * Math.PI / 4);
+    //   this.candys.add(t);
+    // }
     this.add(this.candys);
 
     Mediator.on('freqLight:update', ({ total }) => {
