@@ -8,7 +8,7 @@ import 'gsap';
 import manifest from './manifest';
 import Ressources from './Ressources';
 // Vars
-window.DEBUG = false;
+window.DEBUG = true;
 let device;
 let webGL;
 

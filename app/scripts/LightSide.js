@@ -3,12 +3,14 @@ const THREE = require('three');
 import ParticleSystem from './objects/ParticleSystem';
 import ReactiveObject from './objects/ReactiveObject';
 export default class LightSide {
-  constructor({ scene, renderer }) {
+  constructor({ scene, renderer, config }) {
     this.type = 'lightSide';
     this.scene = scene;
     this.renderer = renderer;
     this.lights = [];
     this.objects = [];
+    this.config = config;
+    console.log(this.config);
   }
   initLights({ spotLights }) {
 
@@ -30,11 +32,16 @@ export default class LightSide {
       renderer: this.renderer,
     });
     this.scene.add(this.particleSystem);
+    for (let i = 0; i < this.config.objects.length; i++) {
+      const obj = this.config.objects[i];
+      if (obj.reactive) {
+        const object = new ReactiveObject(obj);
+        this.scene.add(object);
 
+      } else {}
+    }
 
-    this.candy = new ReactiveObject({ type: 'sapin'});
-    this.candy.position.set(-40, 12, -26);
-    this.scene.add(this.candy);
+    // this.candy.position.set(-40, 28, -26);
   }
   on() {
     this.spotLight.distance = 0;

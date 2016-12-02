@@ -4,6 +4,8 @@ const OrbitControls = require('three-orbit-controls')(THREE);
 import WAGNER from '@superguigui/wagner';
 import Mediator from './Mediator';
 import Ressources from './Ressources';
+import world from './world';
+console.log(world);
 
 // Passes
 const FXAAPass = require('@superguigui/wagner/src/passes/fxaa/FXAAPASS');
@@ -58,7 +60,11 @@ export default class WebGL {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setClearColor(0x262626);
 
-    this.lightSide = new LightSide({ scene: this.scene, renderer: this.renderer });
+    this.lightSide = new LightSide({
+      scene: this.scene,
+      renderer: this.renderer,
+      config: world.lightSide,
+    });
     this.darkSide = new DarkSide({ scene: this.scene, renderer: this.renderer });
     this.switchManager = new SwitchManager({
       scene: this.scene,
@@ -83,17 +89,21 @@ export default class WebGL {
 
     // Add pass and automatic gui
     this.passes = [];
-    this.fxaaPass = new FXAAPass();
-    this.passes.push(this.fxaaPass);
+
+    this.tilt = new Tilt();
+    this.passes.push(this.tilt);
+
     this.noisePass = new NoisePass();
     this.noisePass.params.amount = 0.04;
     this.noisePass.params.speed = 0.4;
     this.passes.push(this.noisePass);
+
     this.vignettePass = new VignettePass({});
     this.passes.push(this.vignettePass);
 
-    this.tilt = new Tilt();
-    this.passes.push(this.tilt);
+    this.fxaaPass = new FXAAPass();
+    this.passes.push(this.fxaaPass);
+
 
     for (let i = 0; i < this.passes.length; i++) {
       this.passes[i].enabled = true;
@@ -120,7 +130,8 @@ export default class WebGL {
           shininess: 300,
           color: 0xffffff,
           side: THREE.DoubleSide,
-          map: Ressources.get('txr-ao'),
+          aoMap: Ressources.get('txr-ao'),
+          aoMapIntensity: 0.3,
         });
         child.geometry.center();
         child.geometry.computeFaceNormals();
@@ -225,6 +236,16 @@ export default class WebGL {
     this.folder.open();
   }
   render() {
+
+    this.tick += 0.01;
+    this.scene.position.x = Math.cos(this.tick * 1.5);
+    this.scene.position.y = Math.sin(this.tick * 2);
+    // this.scene.rotation.y += 0.001;
+
+    this.switchManager.update();
+    this.lightSide.update();
+    this.darkSide.update();
+
     if (this.params.postProcessing) {
       this.composer.reset();
       this.composer.render(this.scene, this.camera);
@@ -235,20 +256,10 @@ export default class WebGL {
           this.composer.pass(this.passes[i]);
         }
       }
-
-      this.composer.toScreen();
-
+      this.composer.toScreen(this.passes[this.passes.length-1]);
     } else {
       this.renderer.render(this.scene, this.camera);
     }
-    this.tick += 0.01;
-    this.scene.position.x = Math.cos(this.tick * 1.5);
-    this.scene.position.y = Math.sin(this.tick * 2);
-    // this.scene.rotation.y += 0.001;
-
-    this.switchManager.update();
-    this.lightSide.update();
-    this.darkSide.update();
 
   }
   rayCast() {

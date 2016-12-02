@@ -2,11 +2,11 @@ export default [
   { name: 'obj-planete', url: './assets/planete2.obj' },
   { name: 'txr-skybox', url: './assets/skybox.jpg' },
 
-  { name: 'obj-cadeau', url: './assets/cadeau.obj' },
-  { name: 'txr-cadeau', url: './assets/cadeau.jpg' },
+  { name: 'obj-present', url: './assets/present.obj' },
+  { name: 'txr-present', url: './assets/present.jpg' },
 
-  { name: 'obj-sapin', url: './assets/sapin.obj' },
-  { name: 'txr-sapin', url: './assets/sapin.jpg' },
+  { name: 'obj-three', url: './assets/three.obj' },
+  { name: 'txr-three', url: './assets/three.jpg' },
 
   { name: 'txr-cadeau-ao', url: './assets/ao-cadeau.jpg' },
   { name: 'obj-candy', url: './assets/candy.obj' },
