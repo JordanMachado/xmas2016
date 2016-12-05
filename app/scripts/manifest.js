@@ -16,6 +16,15 @@ export default [
   { name: 'obj-candy', url: './assets/candy.obj' },
   { name: 'txr-candy', url: './assets/candy.jpg' },
 
+  { name: 'obj-skull', url: './assets/skull/corps.obj' },
+  { name: 'txr-skull', url: './assets/skull/txr/corps.jpg' },
+
+  { name: 'obj-skull-head-top', url: './assets/skull/head-top.obj' },
+  { name: 'txr-skull-head-top', url: './assets/skull/txr/head-top.jpg' },
+
+  { name: 'obj-skull-head-bottom', url: './assets/skull/head-bottom.obj' },
+  { name: 'txr-skull-head-bottom', url: './assets/skull/txr/head-bottom.jpg' },
+
   { name: 'obj-snowman-head', url: './assets/snowman/head.obj' },
   { name: 'txr-snowman-head', url: './assets/snowman/txr/head.jpg' },
 

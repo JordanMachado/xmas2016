@@ -62,6 +62,9 @@ domReady(() => {
   device = deviceType(navigator.userAgent);
   document.querySelector('html').classList.add(device);
 
+
+
+
   Ressources.load(manifest);
 
   if (window.DEBUG || window.DEVMODE) {
@@ -69,10 +72,11 @@ domReady(() => {
   }
   Ressources.on('load:complete', () => {
     // WebGL
+
     webGL = new WebGL({
       device,
       name: 'EXPERIMENT',
-      postProcessing: false,
+      postProcessing: true,
       size: {
         width: window.innerWidth,
         height: window.innerHeight,
@@ -81,13 +85,22 @@ domReady(() => {
         keyboard: {
           up: true,
         },
-        mouse: {},
+        mouse: {
+          move:true,
+        },
         touch: {},
       },
       controls: true,
     });
     document.body.appendChild(webGL.renderer.domElement);
-
+    document.querySelector('.btn').addEventListener('click',() => {
+      console.log('click');
+      webGL.start();
+    });
+    console.log(webGL.renderer.domElement);
+    TweenLite.to(webGL.renderer.domElement,2.5, {
+      autoAlpha:1
+    })
     // Events
     window.addEventListener('resize', resize);
     // KeyBoard

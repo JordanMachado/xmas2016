@@ -171,6 +171,66 @@ const world = {
   darkSide: {
     objects: [
       {
+        type: 'skull',
+        reactive: true,
+        factor: 0.004,
+        ao: false,
+        shininess: 3000,
+        p: {
+          x: -13,
+          y: -22,
+          z: 15,
+        },
+        r: {
+          x: 0,
+          y: -60,
+          z: 0,
+        },
+        follow:true,
+        scale: -0.8,
+        open: true,
+      },
+      {
+        type: 'skull-head-top',
+        reactive: true,
+        factor: 0.004,
+        ao: false,
+        shininess: 3000,
+        p: {
+          x: -13,
+          y: -55,
+          z: 15,
+        },
+        r: {
+          x: 0,
+          y: -60,
+          z: 0,
+        },
+        follow:true,
+        scale: -0.1,
+        open: true,
+      },
+      {
+        type: 'skull-head-bottom',
+        reactive: true,
+        factor: 0.004,
+        ao: false,
+        shininess: 3000,
+        p: {
+          x: -13,
+          y: -49,
+          z: 15,
+        },
+        r: {
+          x: 0,
+          y: -60,
+          z: 0,
+        },
+        scale: -0.1,
+        follow:true,
+        open: true,
+      },
+      {
         type: 'dead-three',
         reactive: true,
         factor: 0.004,

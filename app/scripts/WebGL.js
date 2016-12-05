@@ -45,7 +45,7 @@ export default class WebGL {
       },
       controls: params.controls || false,
     };
-
+    this.interactive = false;
     this.mouse = new THREE.Vector2();
     this.originalMouse = new THREE.Vector2();
     this.raycaster = new THREE.Raycaster();
@@ -55,8 +55,10 @@ export default class WebGL {
     // this.scene.fog = this.fog;
 
     this.camera = new THREE.PerspectiveCamera(50, params.size.width / params.size.height, 1, 5000);
+    this.camera.rotation.x = -0.4955165012108027;
+    this.camera.position.x = -60;
     this.camera.position.z = 200;
-    this.camera.position.y = 20;
+    this.camera.position.y = 90;
 
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(params.size.width, params.size.height);
@@ -75,6 +77,7 @@ export default class WebGL {
     });
     this.switchManager = new SwitchManager({
       scene: this.scene,
+      camera: this.camera,
       lightSide: this.lightSide,
       darkSide: this.darkSide,
     });
@@ -133,8 +136,9 @@ export default class WebGL {
 
 
     for (let i = 0; i < this.passes.length; i++) {
-      if(this.passes[i].enabled === 'undefined')
-      this.passes[i].enabled = true;
+      if(this.passes[i].enabled === undefined) {
+        this.passes[i].enabled = true;
+      }
     }
 
   }
@@ -148,7 +152,8 @@ export default class WebGL {
   }
   initObjects() {
     this.earth = new THREE.Group();
-    // this.earth.position.y = -200
+    this.earth.rotation.y = Math.PI * 2;
+    this.earth.position.y = -300
     // this.earth.position.z = 200
     this.scene.add(this.earth);
     const object = this.planet = Ressources.get('obj-planete');
@@ -175,6 +180,11 @@ export default class WebGL {
     /* Sides */
     this.lightSide.addObjects(this.earth);
     this.darkSide.addObjects(this.earth);
+    // Mediator.emit('switch')
+    // setTimeout(() => {
+    //   this.start();
+    //
+    // },1000)
 
   }
   start() {
@@ -184,8 +194,11 @@ export default class WebGL {
       ease:Quad.easeOut,
     })
     TweenLite.to(this.earth.rotation, 1.2, {
-      y:Math.PI*2,
+      y:0,
       ease:Quad.easeOut,
+      onComplete:() => {
+        this.interactive = true;
+      }
     })
   }
   initGUI() {
@@ -275,11 +288,18 @@ export default class WebGL {
     this.folder.open();
   }
   render() {
-
+    Mediator.emit('scene:update',{rot:this.scene.rotation})
     this.tick += 0.01;
     this.scene.position.x = Math.cos(this.tick * 1.5);
     this.scene.position.y = Math.sin(this.tick * 2);
-    // this.scene.rotation.y += 0.004;
+    if (this.interactive) {
+      this.earth.rotation.y += ( this.mouse.x/2 - this.earth.rotation.y ) * 0.05;
+      this.earth.rotation.z += ( this.mouse.y/5 - this.earth.rotation.z ) * 0.05;
+    }
+
+    this.camera.lookAt( this.scene.position );
+
+    // this.scene.rotation.y += 0.002;
 
     this.switchManager.update();
     this.lightSide.update();

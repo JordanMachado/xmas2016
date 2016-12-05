@@ -3,9 +3,10 @@ import SmokeSystem from './objects/SmokeSystem';
 import ReactiveObject from './objects/ReactiveObject';
 
 export default class DarkSide {
-  constructor({ scene, renderer, config }) {
+  constructor({ scene, camera, renderer, config }) {
     this.type = 'lightSide';
     this.scene = scene;
+    this.camera = camera;
     this.renderer = renderer;
     this.lights = [];
     this.objects = [];
@@ -42,6 +43,7 @@ export default class DarkSide {
       if (obj.reactive) {
         const object = new ReactiveObject(obj);
         ctn.add(object);
+        // this.scene.add(object);
 
       } else {}
     }

@@ -28,6 +28,7 @@ export default class ReactiveObject extends THREE.Object3D {
 
     object.scale.set(obj.scale, obj.scale, obj.scale);
     object.position.set(obj.p.x, obj.p.y, obj.p.z);
+    object.oposition = object.position.clone();
     if (obj.r) {
       object.rotation.set(obj.r.x * RAD, obj.r.y * RAD, obj.r.z * RAD);
     }
@@ -35,14 +36,23 @@ export default class ReactiveObject extends THREE.Object3D {
 
     this.tick = 0;
     this.invert = obj.scale < 0 ? -1 : 1;
+    const post = new THREE.Vector3()
+  //   if(obj.follow) {
+  //   Mediator.on('scene:update', ({ rot }) => {
+  //     this.object.rotation.y = -rot.y
+  //    });
+  //  }
 
     if(this.invert === -1) {
       Mediator.on('freqDark:update', ({ total }) => {
-        this.object.rotation.y = RAD *total;
-        this.object.scale.y = this.invert *
-         Math.max(total * obj.factor + Math.abs(obj.scale),
-         Math.abs(obj.scale)
-       );
+      //   this.object.rotation.y = RAD *total;
+      //   this.object.scale.y = this.invert *
+      //    Math.max(total * obj.factor + Math.abs(obj.scale),
+      //    Math.abs(obj.scale)
+      //  );
+        if (obj.type === 'skull-head-bottom') {
+          this.object.position.y = this.object.oposition.y +  total/40;
+        }
        });
     } else {
       Mediator.on('freqLight:update', ({ total }) => {
@@ -68,7 +78,6 @@ export default class ReactiveObject extends THREE.Object3D {
     pos.add(this.object.position, 'z').min(-200).max(200);
   }
   update() {
-
   }
 
 }

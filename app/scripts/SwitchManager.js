@@ -2,10 +2,10 @@ import Mediator from './Mediator';
 import sono from 'sono';
 
 export default class SwitchManager {
-  constructor({ scene, lightSide, darkSide }) {
-    console.log('SwitchManager');
+  constructor({ scene, camera, lightSide, darkSide }) {
     this.isLightSide = true;
     this.scene = scene;
+    this.camera = camera;
     this.lightSide = lightSide;
     this.darkSide = darkSide;
     this.events();
@@ -25,11 +25,10 @@ export default class SwitchManager {
     });
 
     this.soundLight.play();
-    var echo = this.echo = sono.effect.echo({
+    const echo = this.echo = sono.effect.echo({
       delay: 0.8,
       feedback: 0.5
     });
-    // change the delay time and feedback amount:
     echo.delay = 0.5;
     echo.feedback = 0;
     this.soundLight.currentTime = 50;
@@ -67,11 +66,12 @@ export default class SwitchManager {
       this.soundDark.fade(0, 0.4);
       this.glitch.enabled = false;
       this.rgb.enabled = false;
-
+      this.scene.rotation.y = 2
       this.noise.params.amount = 0.011;
       this.vignette.params.reduction = 1;
 
     } else {
+      this.scene.rotation.y = 1
       this.lightSide.off();
       this.darkSide.on();
       this.soundDark.fade(0.5, 0.4);
@@ -112,7 +112,7 @@ export default class SwitchManager {
       this.rgb.params.delta.x = Math.random() * 80;
       this.rgb.params.delta.y = Math.random() * 80;
       this.vignette.params.reduction = 1 + Math.random() * 0.5;
-      this.darkSide.spotLight.distance = 200 + total
+      this.darkSide.spotLight.distance = 150 + total
     }
   }
 }

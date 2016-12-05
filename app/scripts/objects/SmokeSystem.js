@@ -3,14 +3,15 @@ const THREE = require('three');
 import hexRgb from 'hex-rgb';
 const glslify = require('glslify');
 window.THREE = THREE;
+import Mediator from '../Mediator';
 
 import Ressources from '../Ressources';
 export default class ParticleSystem extends THREE.Object3D {
   constructor({ renderer, scene }) {
     super();
 
-    const width = 128;
-    const height = 128;
+    const width = 72;
+    const height = 72;
     this.dataPos = new Float32Array(width * height * 4);
     this.datatInfos = new Float32Array(width * height * 4);
     this.geom = new THREE.BufferGeometry();
@@ -36,7 +37,7 @@ export default class ParticleSystem extends THREE.Object3D {
       // this.dataPos[i + 2] = Math.random();
       // this.dataPos[i + 3] = Math.random();
       const angle2 = Math.random() * Math.PI * 2;
-      const radius = Math.random() * 60;
+      const radius = Math.random() * 50;
 
       const x = Math.cos(angle2) * radius;
       const z = Math.sin(angle2) * radius;
@@ -154,6 +155,10 @@ export default class ParticleSystem extends THREE.Object3D {
         type: 'f',
         value: 3.0,
       },
+      volume: {
+        type: 'f',
+        value: 1,
+      },
     };
     this.mat = new THREE.ShaderMaterial({
       uniforms: this.uniforms,
@@ -169,7 +174,9 @@ export default class ParticleSystem extends THREE.Object3D {
 
     this.system = new THREE.Points(this.geom, this.mat);
 
-
+    Mediator.on('freqDark:update', ({ total }) => {
+      this.uniforms.volume.value = total / 120;
+    });
     this.add(this.system);
 
     this.timer = 0;
