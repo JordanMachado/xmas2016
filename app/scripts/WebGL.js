@@ -13,6 +13,8 @@ const VignettePass = require('@superguigui/wagner/src/passes/vignette/VignettePa
 const NoisePass = require('@superguigui/wagner/src/passes/noise/noise');
 const Tilt = require('@superguigui/wagner/src/passes/tiltshift/tiltshiftPass');
 const Glitch = require('./postProcessing/glitch/GlitchPass');
+
+const RGB = require('@superguigui/wagner/src/passes/rgbsplit/rgbsplit');
 // Objects
 import Skybox from './objects/Skybox';
 import LightSide from './LightSide';
@@ -108,6 +110,16 @@ export default class WebGL {
     this.passes.push(this.vignettePass);
     this.switchManager.vignette = this.vignettePass;
 
+    this.rgb = new RGB({});
+    this.switchManager.rgb = this.rgb;
+
+   this.rgb.params.delta = new THREE.Vector2(50, 50);
+   this.rgb.params.brightness = 1.05;
+   this.passes.push(this.rgb);
+   this.rgb.enabled = false;
+
+
+
     this.glitchPass = new Glitch();
     this.glitchPass.enabled = false;
     this.switchManager.glitch = this.glitchPass;
@@ -121,6 +133,7 @@ export default class WebGL {
 
 
     for (let i = 0; i < this.passes.length; i++) {
+      if(this.passes[i].enabled === 'undefined')
       this.passes[i].enabled = true;
     }
 
@@ -134,7 +147,10 @@ export default class WebGL {
     this.darkSide.initLights({ spotLights: this.spotLights });
   }
   initObjects() {
-
+    this.earth = new THREE.Group();
+    // this.earth.position.y = -200
+    // this.earth.position.z = 200
+    this.scene.add(this.earth);
     const object = this.planet = Ressources.get('obj-planete');
     object.traverse((child) => {
       if (child instanceof THREE.Mesh) {
@@ -151,15 +167,26 @@ export default class WebGL {
       }
     });
     object.scale.set(10, 10, 10);
-    this.scene.add(object);
+    this.earth.add(object);
 
     /* Common */
     this.skybox = new Skybox();
     this.scene.add(this.skybox);
     /* Sides */
-    this.lightSide.addObjects();
-    this.darkSide.addObjects();
+    this.lightSide.addObjects(this.earth);
+    this.darkSide.addObjects(this.earth);
 
+  }
+  start() {
+    TweenLite.to(this.earth.position, 1.2, {
+      y:0,
+      z:0,
+      ease:Quad.easeOut,
+    })
+    TweenLite.to(this.earth.rotation, 1.2, {
+      y:Math.PI*2,
+      ease:Quad.easeOut,
+    })
   }
   initGUI() {
     window.webgl = this;
@@ -252,7 +279,7 @@ export default class WebGL {
     this.tick += 0.01;
     this.scene.position.x = Math.cos(this.tick * 1.5);
     this.scene.position.y = Math.sin(this.tick * 2);
-    // this.scene.rotation.y += 0.001;
+    // this.scene.rotation.y += 0.004;
 
     this.switchManager.update();
     this.lightSide.update();

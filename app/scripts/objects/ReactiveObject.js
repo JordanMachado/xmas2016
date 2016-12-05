@@ -32,20 +32,31 @@ export default class ReactiveObject extends THREE.Object3D {
       object.rotation.set(obj.r.x * RAD, obj.r.y * RAD, obj.r.z * RAD);
     }
     this.add(this.object);
-    console.log(obj.scale);
+
     this.tick = 0;
     this.invert = obj.scale < 0 ? -1 : 1;
-    Mediator.on('freqLight:update', ({ total }) => {
-      this.object.scale.y = this.invert *
-       Math.max(total * obj.factor + Math.abs(obj.scale),
-       Math.abs(obj.scale)
-     );
-      if (obj.type === 'snowman-head' ) {
-        this.tick += 0.1;
-        // object.rotation.z = Math.sin(this.tick + total * 0.05) * RAD * 10;
-        object.rotation.z = Math.sin(this.tick  ) * RAD * 10;
-      }
-    });
+
+    if(this.invert === -1) {
+      Mediator.on('freqDark:update', ({ total }) => {
+        this.object.rotation.y = RAD *total;
+        this.object.scale.y = this.invert *
+         Math.max(total * obj.factor + Math.abs(obj.scale),
+         Math.abs(obj.scale)
+       );
+       });
+    } else {
+      Mediator.on('freqLight:update', ({ total }) => {
+        this.object.scale.y = this.invert *
+         Math.max(total * obj.factor + Math.abs(obj.scale),
+         Math.abs(obj.scale)
+       );
+        if (obj.type === 'snowman-head') {
+          this.tick += 0.1;
+          object.rotation.z = Math.sin(this.tick + total * 0.05) * RAD * 10;
+          // object.rotation.z = Math.sin(this.tick  ) * RAD * 10;
+        }
+      });
+    }
   }
   addGUI(folder) {
     const obj = folder.addFolder(`${this.type + this.id}`);

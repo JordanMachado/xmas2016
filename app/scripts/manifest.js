@@ -9,6 +9,10 @@ export default [
   { name: 'obj-three', url: './assets/three.obj' },
   { name: 'txr-three', url: './assets/three.jpg' },
 
+  { name: 'obj-renne', url: './assets/renne.obj' },
+  { name: 'txr-renne', url: './assets/renne.jpg' },
+
+
   { name: 'obj-candy', url: './assets/candy.obj' },
   { name: 'txr-candy', url: './assets/candy.jpg' },
 

@@ -5,6 +5,7 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  background: black;
 }
 #debug {
   position: absolute;
@@ -18,3 +19,11 @@ body {
   -webkit-user-select: none;
   cursor: default;
 }
+
+// .intro {
+//   position: absolute;
+//   width: 100%;
+//   height: 100%;
+//   background: black;
+//   opacity: 0.5;
+// }

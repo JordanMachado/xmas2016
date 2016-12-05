@@ -16,7 +16,7 @@ void main() {
       vec4 pos = texture2D(tPositions, vUv);
       vec4 infos = texture2D(tInfos, vUv);
       float life = pos.a;
-      life-= 0.01;
+      life-= 0.005;
       if(life< 0.0) {
         life = 1.0;
           pos.xyz = opos.xyz;

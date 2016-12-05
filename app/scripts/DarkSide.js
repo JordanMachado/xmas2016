@@ -26,12 +26,14 @@ export default class DarkSide {
     }
     spotLights.push(this.spotLight);
   }
-  addObjects() {
+  addObjects(ctn) {
     this.smokeSystem = new SmokeSystem({
       scene: this.scene,
       renderer: this.renderer,
     });
-    this.scene.add(this.smokeSystem);
+
+    // this.smokeSystem.position.set(40, 5, 10);
+    ctn.add(this.smokeSystem);
 
     for (let i = 0; i < this.config.objects.length; i++) {
 
@@ -39,7 +41,7 @@ export default class DarkSide {
       console.log('cc',obj);
       if (obj.reactive) {
         const object = new ReactiveObject(obj);
-        this.scene.add(object);
+        ctn.add(object);
 
       } else {}
     }
@@ -48,9 +50,15 @@ export default class DarkSide {
   }
   on() {
     this.spotLight.distance = 0;
+    TweenMax.to(this.smokeSystem.uniforms.alpha,0.4, {
+      value: 1,
+    })
   }
   off() {
     this.spotLight.distance = 1;
+    TweenMax.to(this.smokeSystem.uniforms.alpha,0.4, {
+      value: 0,
+    })
   }
   update() {
     this.smokeSystem.update();

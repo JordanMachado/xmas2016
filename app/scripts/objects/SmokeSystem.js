@@ -9,8 +9,8 @@ export default class ParticleSystem extends THREE.Object3D {
   constructor({ renderer, scene }) {
     super();
 
-    const width = 72;
-    const height = 72;
+    const width = 128;
+    const height = 128;
     this.dataPos = new Float32Array(width * height * 4);
     this.datatInfos = new Float32Array(width * height * 4);
     this.geom = new THREE.BufferGeometry();
@@ -31,18 +31,29 @@ export default class ParticleSystem extends THREE.Object3D {
     ];
     for (let i = 0, l = width * height * 4; i < l; i += 4) {
 
-      this.dataPos[i] = Math.random();
+      // this.dataPos[i] = Math.random();
+      // this.dataPos[i + 1] = 0;
+      // this.dataPos[i + 2] = Math.random();
+      // this.dataPos[i + 3] = Math.random();
+      const angle2 = Math.random() * Math.PI * 2;
+      const radius = Math.random() * 60;
+
+      const x = Math.cos(angle2) * radius;
+      const z = Math.sin(angle2) * radius;
+      this.dataPos[i] = x;
       this.dataPos[i + 1] = 0;
-      this.dataPos[i + 2] = Math.random();
+      this.dataPos[i + 2] = z;
       this.dataPos[i + 3] = Math.random();
 
-      size[count * 3] = Math.random() * 100;
+      size[count * 3] = Math.random() * 50;
 
       const angle = Math.random() * Math.PI * 2;
 
       this.datatInfos[i] = Math.cos(angle);
-      this.datatInfos[i + 1] = Math.random() * 0.5;
+      this.datatInfos[i + 1] = Math.random() * 0.3;
       this.datatInfos[i + 2] = Math.sin(angle);
+
+
 
       uvs[count * 2 + 0] = (count % width) / width;
       uvs[count * 2 + 1] = Math.floor(count / width) / height;
@@ -130,6 +141,10 @@ export default class ParticleSystem extends THREE.Object3D {
       tSmoke: {
         type: 't',
         value: Ressources.get('txr-smoke'),
+      },
+      alpha: {
+        type: 'f',
+        value: 1,
       },
       origin: {
         type: 't',

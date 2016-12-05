@@ -3,14 +3,15 @@ const THREE = require('three');
 import hexRgb from 'hex-rgb';
 const glslify = require('glslify');
 window.THREE = THREE;
+import Mediator from '../Mediator';
 
 
 export default class ParticleSystem extends THREE.Object3D {
   constructor({ renderer, scene }) {
     super();
 
-    const width = 256;
-    const height = 256;
+    const width = 128;
+    const height = 128;
     this.dataPos = new Float32Array(width * height * 4);
     this.datatInfos = new Float32Array(width * height * 4);
     this.geom = new THREE.BufferGeometry();
@@ -24,10 +25,8 @@ export default class ParticleSystem extends THREE.Object3D {
 
     this.colors = [
       'FFFFFF',
-      '00171F',
-      '003459',
-      '007EA7',
-      '00A8E8',
+      'aaebff',
+      '56d7ff'
     ];
     for (let i = 0, l = width * height * 4; i < l; i += 4) {
       const angle = Math.random() * Math.PI * 2;
@@ -136,6 +135,14 @@ export default class ParticleSystem extends THREE.Object3D {
         type: 'f',
         value: 3.0,
       },
+      volume: {
+        type: 'f',
+        value: 1.0,
+      },
+      alpha: {
+        type: 'f',
+        value: 1.0,
+      },
     };
     this.mat = new THREE.ShaderMaterial({
       uniforms: this.uniforms,
@@ -147,7 +154,9 @@ export default class ParticleSystem extends THREE.Object3D {
 
 
     this.system = new THREE.Points(this.geom, this.mat);
-
+    Mediator.on('freqLight:update', ({ total }) => {
+      this.uniforms.volume.value = total / 150;
+    });
 
     this.add(this.system);
 

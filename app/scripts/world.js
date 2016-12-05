@@ -15,6 +15,24 @@ const world = {
         scale: 0.08,
       },
       {
+        type: 'renne',
+        reactive: true,
+        factor: 0.01,
+        ao: false,
+        shininess: 3000,
+        p: {
+          x: -22,
+          y: 15,
+          z: -46,
+        },
+        r: {
+          x: 0,
+          y: -20,
+          z: 0,
+        },
+        scale: 10,
+      },
+      {
         type: 'present',
         reactive: true,
         factor: 0.0002,
@@ -65,12 +83,12 @@ const world = {
         ao: false,
         shininess: 3000,
         p: {
-          x: -17,
+          x: -55,
           y: 15,
-          z: -58,
+          z: -41,
         },
         r: {
-          x: -8,
+          x: 8,
           y: 50,
           z: 0,
         },
@@ -155,7 +173,7 @@ const world = {
       {
         type: 'dead-three',
         reactive: true,
-        factor: 0.002,
+        factor: 0.004,
         ao: false,
         shininess: 3000,
         p: {

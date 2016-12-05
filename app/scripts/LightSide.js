@@ -26,17 +26,17 @@ export default class LightSide {
     }
     spotLights.push(this.spotLight);
   }
-  addObjects() {
+  addObjects(ctn) {
     this.particleSystem = new ParticleSystem({
       scene: this.scene,
       renderer: this.renderer,
     });
-    this.scene.add(this.particleSystem);
+    ctn.add(this.particleSystem);
     for (let i = 0; i < this.config.objects.length; i++) {
       const obj = this.config.objects[i];
       if (obj.reactive) {
         const object = new ReactiveObject(obj);
-        this.scene.add(object);
+        ctn.add(object);
 
       } else {}
     }
@@ -45,9 +45,15 @@ export default class LightSide {
   }
   on() {
     this.spotLight.distance = 0;
+    TweenMax.to(this.particleSystem.uniforms.alpha,0.4, {
+      value: 1,
+    });
   }
   off() {
     this.spotLight.distance = 1;
+    TweenMax.to(this.particleSystem.uniforms.alpha,0.4, {
+      value: 0,
+    });
   }
   update() {
     this.particleSystem.update();
