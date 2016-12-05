@@ -12,6 +12,7 @@ const FXAAPass = require('@superguigui/wagner/src/passes/fxaa/FXAAPASS');
 const VignettePass = require('@superguigui/wagner/src/passes/vignette/VignettePass');
 const NoisePass = require('@superguigui/wagner/src/passes/noise/noise');
 const Tilt = require('@superguigui/wagner/src/passes/tiltshift/tiltshiftPass');
+const Glitch = require('./postProcessing/glitch/GlitchPass');
 // Objects
 import Skybox from './objects/Skybox';
 import LightSide from './LightSide';
@@ -65,7 +66,11 @@ export default class WebGL {
       renderer: this.renderer,
       config: world.lightSide,
     });
-    this.darkSide = new DarkSide({ scene: this.scene, renderer: this.renderer });
+    this.darkSide = new DarkSide({
+      scene: this.scene,
+      renderer: this.renderer,
+      config: world.darkSide,
+    });
     this.switchManager = new SwitchManager({
       scene: this.scene,
       lightSide: this.lightSide,
@@ -89,9 +94,10 @@ export default class WebGL {
 
     // Add pass and automatic gui
     this.passes = [];
+    const pp = {};
 
-    this.tilt = new Tilt();
-    this.passes.push(this.tilt);
+    // this.tilt = new Tilt();
+    // this.passes.push(this.tilt);
 
     this.noisePass = new NoisePass();
     this.noisePass.params.amount = 0.04;
@@ -100,9 +106,18 @@ export default class WebGL {
 
     this.vignettePass = new VignettePass({});
     this.passes.push(this.vignettePass);
+    this.switchManager.vignette = this.vignettePass;
+
+    this.glitchPass = new Glitch();
+    this.glitchPass.enabled = false;
+    this.switchManager.glitch = this.glitchPass;
+    this.passes.push(this.glitchPass);
 
     this.fxaaPass = new FXAAPass();
     this.passes.push(this.fxaaPass);
+    this.switchManager.noise = this.noisePass;
+    //
+
 
 
     for (let i = 0; i < this.passes.length; i++) {
@@ -121,9 +136,6 @@ export default class WebGL {
   initObjects() {
 
     const object = this.planet = Ressources.get('obj-planete');
-    const normal = Ressources.get('txr-normal');
-    normal.wrapS = normal.wrapT = THREE.RepeatWrapping;
-    // normal.repeat.set( 100, 100 );
     object.traverse((child) => {
       if (child instanceof THREE.Mesh) {
         child.material = new THREE.MeshPhongMaterial({
@@ -256,7 +268,7 @@ export default class WebGL {
           this.composer.pass(this.passes[i]);
         }
       }
-      this.composer.toScreen(this.passes[this.passes.length-1]);
+      this.composer.toScreen(this.passes[this.passes.length - 1]);
     } else {
       this.renderer.render(this.scene, this.camera);
     }

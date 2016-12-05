@@ -1,13 +1,16 @@
 const THREE = require('three');
 import SmokeSystem from './objects/SmokeSystem';
+import ReactiveObject from './objects/ReactiveObject';
 
 export default class DarkSide {
-  constructor({ scene, renderer }) {
+  constructor({ scene, renderer, config }) {
     this.type = 'lightSide';
     this.scene = scene;
     this.renderer = renderer;
     this.lights = [];
     this.objects = [];
+    this.config = config;
+
   }
   initLights({ spotLights }) {
     const directionalLight = new THREE.DirectionalLight(0xd95eff, 0.1);
@@ -29,6 +32,18 @@ export default class DarkSide {
       renderer: this.renderer,
     });
     this.scene.add(this.smokeSystem);
+
+    for (let i = 0; i < this.config.objects.length; i++) {
+
+      const obj = this.config.objects[i];
+      console.log('cc',obj);
+      if (obj.reactive) {
+        const object = new ReactiveObject(obj);
+        this.scene.add(object);
+
+      } else {}
+    }
+    this.off();
 
   }
   on() {

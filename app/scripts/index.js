@@ -72,7 +72,7 @@ domReady(() => {
     webGL = new WebGL({
       device,
       name: 'EXPERIMENT',
-      postProcessing: true,
+      postProcessing: false,
       size: {
         width: window.innerWidth,
         height: window.innerHeight,
