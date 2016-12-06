@@ -11,6 +11,10 @@ export default class SwitchManager {
     this.events();
     this.sounds();
 
+    Mediator.on('energy:charge', (transition) => {
+      this.charge(transition);
+    });
+
 
   }
   sounds() {
@@ -24,14 +28,12 @@ export default class SwitchManager {
       smoothingTimeConstant: 0.7,
     });
 
-    this.soundLight.play();
     const echo = this.echo = sono.effect.echo({
       delay: 0.8,
-      feedback: 0.5
+      feedback: 0.5,
     });
     echo.delay = 0.5;
     echo.feedback = 0;
-    this.soundLight.currentTime = 50;
     this.soundDark = sono.createSound({
       id: 'dark',
       src: 'assets/sound/dark.mp3',
@@ -41,7 +43,12 @@ export default class SwitchManager {
       fftSize: 1024,
       smoothingTimeConstant: 0.7,
     });
+  }
+  start() {
+    this.soundLight.play();
     this.soundDark.play();
+    // this.soundLight.currentTime = 50;
+
   }
   events() {
     Mediator.on('switch', this.onSwitch.bind(this));
@@ -52,34 +59,38 @@ export default class SwitchManager {
       x: this.scene.rotation.x + Math.PI / 180 * 180,
       ease: Quad.easeOut,
     });
-    TweenMax.to(this.echo, 0.2, {
-      feedback: 0.9,
-      repeat:3,
-      yoyo: true,
-      ease: Quad.easeOut,
-    });
+    this.echo.feedback = 0
+
     this.isLightSide = !this.isLightSide;
     if (this.isLightSide) {
       this.lightSide.on();
       this.darkSide.off();
       this.soundLight.fade(0.5, 0.4);
       this.soundDark.fade(0, 0.4);
-      this.glitch.enabled = false;
-      this.rgb.enabled = false;
-      this.scene.rotation.y = 2
+
+      this.scene.rotation.y = 2;
       this.noise.params.amount = 0.011;
       this.vignette.params.reduction = 1;
 
     } else {
-      this.scene.rotation.y = 1
+      this.scene.rotation.y = 1;
       this.lightSide.off();
       this.darkSide.on();
       this.soundDark.fade(0.5, 0.4);
       this.soundLight.fade(0, 0.4);
-      this.glitch.enabled = true;
-      this.rgb.enabled = true;
 
     }
+  }
+  charge(transition) {
+    this.noise.params.amount = 0.4 * transition;
+    this.rgb.params.delta.x = Math.random() * 80 * transition;
+    this.rgb.params.delta.y = Math.random() * 80 * transition;
+    this.glitch.intensity = 0.5 * transition;
+    this.echo.feedback = 0.9 * transition;
+    this.vignette.params.reduction = 1 + transition;
+
+    this.soundLight.playbackRate = 1 - transition / 5;
+
   }
   update() {
 
@@ -112,7 +123,7 @@ export default class SwitchManager {
       this.rgb.params.delta.x = Math.random() * 80;
       this.rgb.params.delta.y = Math.random() * 80;
       this.vignette.params.reduction = 1 + Math.random() * 0.5;
-      this.darkSide.spotLight.distance = 150 + total
+      this.darkSide.spotLight.distance = 150 + total;
     }
   }
 }

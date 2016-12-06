@@ -5,7 +5,7 @@ import WAGNER from '@superguigui/wagner';
 import Mediator from './Mediator';
 import Ressources from './Ressources';
 import world from './world';
-console.log(world);
+import Energy from './Energy';
 
 // Passes
 const FXAAPass = require('@superguigui/wagner/src/passes/fxaa/FXAAPASS');
@@ -59,7 +59,7 @@ export default class WebGL {
     this.camera.position.x = -60;
     this.camera.position.z = 200;
     this.camera.position.y = 90;
-
+    this.spaceDown = false;
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(params.size.width, params.size.height);
     this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -89,6 +89,7 @@ export default class WebGL {
     this.controls = new OrbitControls(this.camera);
     this.controls.enabled = this.params.controls;
     this.tick = 0;
+    this.energy = new Energy();
 
     if (window.DEBUG || window.DEVMODE) this.initGUI();
 
@@ -119,12 +120,12 @@ export default class WebGL {
    this.rgb.params.delta = new THREE.Vector2(50, 50);
    this.rgb.params.brightness = 1.05;
    this.passes.push(this.rgb);
-   this.rgb.enabled = false;
+  //  this.rgb.enabled = false;
 
 
 
     this.glitchPass = new Glitch();
-    this.glitchPass.enabled = false;
+    // this.glitchPass.enabled = false;
     this.switchManager.glitch = this.glitchPass;
     this.passes.push(this.glitchPass);
 
@@ -189,17 +190,18 @@ export default class WebGL {
   }
   start() {
     TweenLite.to(this.earth.position, 1.2, {
-      y:0,
-      z:0,
-      ease:Quad.easeOut,
-    })
+      y: 0,
+      z: 0,
+      ease: Quad.easeOut,
+    });
     TweenLite.to(this.earth.rotation, 1.2, {
-      y:0,
-      ease:Quad.easeOut,
-      onComplete:() => {
+      y: 0,
+      ease: Quad.easeOut,
+      onComplete: () => {
         this.interactive = true;
-      }
-    })
+      },
+    });
+    this.switchManager.start();
   }
   initGUI() {
     window.webgl = this;
@@ -288,6 +290,8 @@ export default class WebGL {
     this.folder.open();
   }
   render() {
+    if (this.spaceDown)
+      this.energy.charge();
     Mediator.emit('scene:update',{rot:this.scene.rotation})
     this.tick += 0.01;
     this.scene.position.x = Math.cos(this.tick * 1.5);
@@ -340,11 +344,19 @@ export default class WebGL {
     this.renderer.setSize(width, height);
   }
   keyPress() {}
-  keyDown() {}
+  keyDown(e) {
+    if (e.keyCode === 32) {
+      this.spaceDown = true;
+    }
+  }
   keyUp(e) {
     // console.log(e.keyCode);
     if (e.keyCode === 32) {
-      Mediator.emit('switch');
+      this.spaceDown = false;
+      if (this.energy.activate)
+        Mediator.emit('switch');
+
+      this.energy.release();
     }
   }
   click(x, y, time) {

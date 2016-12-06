@@ -7,6 +7,8 @@ import dat from 'dat-gui';
 import 'gsap';
 import manifest from './manifest';
 import Ressources from './Ressources';
+import sono from 'sono';
+
 // Vars
 window.DEBUG = true;
 let device;
@@ -62,9 +64,13 @@ domReady(() => {
   device = deviceType(navigator.userAgent);
   document.querySelector('html').classList.add(device);
 
-
-
-
+  const sound = sono.createSound({
+    id: 'foo',
+    src: 'assets/sound/crepi.mp3',
+    volume: 0.5,
+    loop: true,
+  });
+  sound.play();
   Ressources.load(manifest);
 
   if (window.DEBUG || window.DEVMODE) {
@@ -83,24 +89,30 @@ domReady(() => {
       },
       events: {
         keyboard: {
+          down: true,
           up: true,
         },
         mouse: {
-          move:true,
+          move: true,
         },
         touch: {},
       },
       controls: true,
     });
+    const intro = document.querySelector('.intro');
+    const start = document.querySelector('.btn');
     document.body.appendChild(webGL.renderer.domElement);
-    document.querySelector('.btn').addEventListener('click',() => {
+    start.addEventListener('click', () => {
       console.log('click');
+      sound.fade(0, 0.4);
       webGL.start();
+      TweenLite.to(intro, 1.5, {
+        autoAlpha: 0,
+      });
     });
-    console.log(webGL.renderer.domElement);
-    TweenLite.to(webGL.renderer.domElement,2.5, {
-      autoAlpha:1
-    })
+    TweenLite.to(webGL.renderer.domElement, 2.5, {
+      autoAlpha: 1,
+    });
     // Events
     window.addEventListener('resize', resize);
     // KeyBoard
