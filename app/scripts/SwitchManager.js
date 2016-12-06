@@ -60,6 +60,7 @@ export default class SwitchManager {
       ease: Quad.easeOut,
     });
     this.echo.feedback = 0
+    this.soundDark.volume = 0.5
 
     this.isLightSide = !this.isLightSide;
     if (this.isLightSide) {
@@ -67,6 +68,7 @@ export default class SwitchManager {
       this.darkSide.off();
       this.soundLight.fade(0.5, 0.4);
       this.soundDark.fade(0, 0.4);
+      this.camera.position.x = -60
 
       this.scene.rotation.y = 2;
       this.noise.params.amount = 0.011;
@@ -74,22 +76,29 @@ export default class SwitchManager {
 
     } else {
       this.scene.rotation.y = 1;
+      this.camera.position.x = -20
       this.lightSide.off();
       this.darkSide.on();
       this.soundDark.fade(0.5, 0.4);
+
       this.soundLight.fade(0, 0.4);
 
     }
   }
   charge(transition) {
     this.noise.params.amount = 0.4 * transition;
-    this.rgb.params.delta.x = Math.random() * 80 * transition;
-    this.rgb.params.delta.y = Math.random() * 80 * transition;
-    this.glitch.intensity = 0.5 * transition;
+    this.rgb.params.delta.x = Math.random() * 140 * transition;
+    this.rgb.params.delta.y = Math.random() * 140 * transition;
+    this.glitch.intensity = 0.1 * transition;
     this.echo.feedback = 0.9 * transition;
-    this.vignette.params.reduction = 1 + transition;
+    this.vignette.params.reduction = 1 + transition * 1.4;
 
     this.soundLight.playbackRate = 1 - transition / 5;
+    // this.soundDark.volume = transition / 2.5;
+
+    this.camera.position.z = 200 - 20 * transition;
+    this.camera.position.y = 90 + (Math.random() * 10 * transition);
+
 
   }
   update() {
@@ -118,10 +127,10 @@ export default class SwitchManager {
         total,
       });
 
-      this.noise.params.amount = Math.random() * 0.8;
+      this.noise.params.amount = Math.random() * 0.6;
       this.glitch.intensity = Math.random() * 0.5;
-      this.rgb.params.delta.x = Math.random() * 80;
-      this.rgb.params.delta.y = Math.random() * 80;
+      this.rgb.params.delta.x = Math.random() * 140;
+      this.rgb.params.delta.y = Math.random() * 140;
       this.vignette.params.reduction = 1 + Math.random() * 0.5;
       this.darkSide.spotLight.distance = 150 + total;
     }

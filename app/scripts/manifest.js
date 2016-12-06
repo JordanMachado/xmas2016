@@ -12,6 +12,10 @@ export default [
   { name: 'obj-renne', url: './assets/renne.obj' },
   { name: 'txr-renne', url: './assets/renne.jpg' },
 
+  { name: 'obj-hand', url: './assets/hand.obj' },
+  { name: 'txr-hand', url: './assets/hand.jpg' },
+
+
 
   { name: 'obj-candy', url: './assets/candy.obj' },
   { name: 'txr-candy', url: './assets/candy.jpg' },

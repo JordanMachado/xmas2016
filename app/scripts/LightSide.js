@@ -10,7 +10,6 @@ export default class LightSide {
     this.lights = [];
     this.objects = [];
     this.config = config;
-    console.log(this.config);
   }
   initLights({ spotLights }) {
 

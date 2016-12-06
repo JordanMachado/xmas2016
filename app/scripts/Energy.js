@@ -12,7 +12,7 @@ export default class Energy {
   charge() {
     if (this.activate) return;
     if (this.value < this.max) {
-      this.value += 0.05;
+      this.value += 0.04;
       const ratio = Math.abs(this.value / this.max);
       const r = (ratio) - 1.0;
       const value = r * r * r + 1.0;

@@ -45,11 +45,13 @@ export default class ReactiveObject extends THREE.Object3D {
 
     if(this.invert === -1) {
       Mediator.on('freqDark:update', ({ total }) => {
-      //   this.object.rotation.y = RAD *total;
-      //   this.object.scale.y = this.invert *
-      //    Math.max(total * obj.factor + Math.abs(obj.scale),
-      //    Math.abs(obj.scale)
-      //  );
+        this.object.scale.y = this.invert *
+         Math.max(total * obj.factor + Math.abs(obj.scale),
+         Math.abs(obj.scale)
+       );
+       if (obj.type === 'hand') {
+         this.object.rotation.y = RAD * -total/2;
+       }
         if (obj.type === 'skull-head-bottom') {
           this.object.position.y = this.object.oposition.y +  total/40;
         }

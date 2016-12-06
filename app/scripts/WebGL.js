@@ -353,7 +353,7 @@ export default class WebGL {
     // console.log(e.keyCode);
     if (e.keyCode === 32) {
       this.spaceDown = false;
-      if (this.energy.activate)
+      // if (this.energy.activate)
         Mediator.emit('switch');
 
       this.energy.release();

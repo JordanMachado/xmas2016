@@ -7,7 +7,10 @@ body {
   overflow: hidden;
   background: black;
   color:white;
-
+  font-family: 'Bungee', cursive;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
 }
 #debug {
   position: absolute;
@@ -31,29 +34,67 @@ canvas {
 .intro {
   position: absolute;
   width: 50%;
-  height: 50%;
   top: 50%;
   left: 50%;
+  // background: black;
   transform: translate(-50%, -50%);
   text-align: center;
+  .loader {
+    position: relative;
+    width: 80%;
+    margin: 0 auto;
+    height: 50px;
+    overflow: hidden;
+    margin-top: 30px;
+    .bar {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+      .progress {
+        position: relative;
+        background: url(../assets/snow.png);
 
+        height: 100%;
+        width: 0;
+      }
+    }
+  }
   .btn {
+    position: absolute;
+    cursor: pointer;
+    top:0;
+    margin: 0 auto;
+    padding: 15px;
     color:white;
-    background: red;
-    height:50px;
+    width: 30%;
+    left:50%;
+    opacity: 0;
+    transform: translate(-50%, 0);
+    visibility: hidden;
   }
 }
 
-.bar {
+.space {
   position: absolute;
-  bottom: 0;
-  width: 20%;
-  height:20px;
-  background: red;
+  height: 20px;
+  background: #4c4c4c;
+  bottom:12%;
+  left: 50%;
+  width: 150px;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  visibility: hidden;
+
   .energy {
-    position: relative;
-    width: 0%;
-    height: 100%;
     background: white;
+    height: 100%;
   }
+}
+
+h1, p {
+  background: url(../assets/snow.png);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

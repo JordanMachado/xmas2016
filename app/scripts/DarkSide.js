@@ -37,9 +37,7 @@ export default class DarkSide {
     ctn.add(this.smokeSystem);
 
     for (let i = 0; i < this.config.objects.length; i++) {
-
       const obj = this.config.objects[i];
-      console.log('cc',obj);
       if (obj.reactive) {
         const object = new ReactiveObject(obj);
         ctn.add(object);

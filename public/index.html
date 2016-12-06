@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="./build/main.css" media="screen" title="main" charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Bungee" rel="stylesheet">
   <meta name="viewport" content="width=device-width">
   <link rel="icon" type="image/png" href="favicon.png" />
   <!-- Facebook -->
@@ -26,14 +27,16 @@
 <body>
   <div class="intro">
     <h1>Skull Santa</h1>
-    <div class="loader">loader</div>
-    <div class="instruction">instruction</div>
-    <div class="btn">Bouton</div>
-  </div>
-  <div class="bar">
-    <div class="energy">
-
+    <p class="instruction">Hold space, and let's rock</p>
+    <div class="loader">
+      <div class="bar">
+        <div class="progress"></div>
+      </div>
+      <div class="btn">Start</div>
     </div>
+  </div>
+  <div class="space">
+    <div class="energy"></div>
   </div>
   <script src="./build/resource-loader.js"></script>
   <script src="./build/main.js"></script>
