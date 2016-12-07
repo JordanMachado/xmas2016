@@ -36,6 +36,7 @@ export default class LightSide {
       if (obj.reactive) {
         const object = new ReactiveObject(obj);
         ctn.add(object);
+        // this.scene.add(object);
 
       } else {}
     }

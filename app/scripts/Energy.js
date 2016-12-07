@@ -6,11 +6,14 @@ export default class Energy {
     this.activate = false;
     this.max = 5;
     this.el = document.querySelector('.energy');
+    this.animating = false;
   }
   add() {
   }
   charge() {
     if (this.activate) return;
+    if(this.animating)
+    TweenLite.killTweensOf(this)
     if (this.value < this.max) {
       this.value += 0.04;
       const ratio = Math.abs(this.value / this.max);
@@ -28,11 +31,22 @@ export default class Energy {
 
   }
   release() {
-    this.value = 0;
-    this.activate = false;
-    this.el.style.width = `${this.value / this.max * 100}%`;
-    Mediator.emit('energy:charge', 0);
-
+    this.animating = true;
+    TweenLite.to(this, 0.5, {
+      value: 0,
+      onUpdate: () => {
+        const ratio = Math.abs(this.value / this.max);
+        const r = (ratio) - 1.0;
+        const value = r * r * r + 1.0;
+        this.el.style.width = `${value * 100}%`;
+        Mediator.emit('energy:charge', ratio);
+      },
+      onComplete: () => {
+        this.activate = false;
+        this.animating = false;
+      },
+      ease: Expo.easeOut,
+    });
 
   }
   update() {

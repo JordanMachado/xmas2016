@@ -14,7 +14,7 @@ window.DEBUG = true;
 let device;
 let webGL;
 
-
+// console.warn = function() {};
 function animate() {
   raf(animate);
   webGL.render();
@@ -79,20 +79,19 @@ domReady(() => {
 
   const intro = document.querySelector('.intro');
   const start = document.querySelector('.btn');
-  const barEl = document.querySelector('.bar')
-  const progressEl = document.querySelector('.loader .progress')
-  const spaceEl = document.querySelector('.space')
-  Ressources.on('load:progress',(loader) => {
-
+  const loaderEl = document.querySelector('.loader');
+  const progressEl = document.querySelector('.loader .progress');
+  const instructionEl = document.querySelector('.instruction');
+  Ressources.on('load:progress', (loader) => {
     progressEl.style.width = `${loader.progress}%`;
-  })
+  });
   Ressources.on('load:complete', () => {
     // WebGL
 
     webGL = new WebGL({
       device,
       name: 'EXPERIMENT',
-      // postProcessing: true,
+      postProcessing: true,
       size: {
         width: window.innerWidth,
         height: window.innerHeight,
@@ -111,31 +110,31 @@ domReady(() => {
     });
 
     document.body.appendChild(webGL.renderer.domElement);
-    // start.addEventListener('click', () => {
+    start.addEventListener('click', () => {
       sound.fade(0, 0.4);
       webGL.start();
       TweenLite.to(intro, 1.5, {
         autoAlpha: 0,
       });
-      TweenLite.to(spaceEl, 1.5, {
+      TweenLite.to(instructionEl, 1.5, {
         autoAlpha: 1,
       });
 
-    // });
-
-    TweenLite.to(barEl, 0.5, {
+    });
+    //
+    TweenLite.to(loaderEl, 0.5, {
       autoAlpha: 0,
-      ease:Quad.easeIn,
-      delay:1,
+      ease: Quad.easeIn,
+      delay: 1,
     });
     TweenLite.to(start, 2.5, {
       autoAlpha: 1,
-      delay:1.6,
-      ease:Quad.easeOut,
+      delay: 1.6,
+      ease: Quad.easeOut,
     });
-    TweenLite.to(webGL.renderer.domElement, 0.5, {
+    TweenLite.to(webGL.renderer.domElement, 2, {
       autoAlpha: 1,
-      ease:Quad.easeOut,
+      ease: Quad.easeOut,
     });
     // Events
     window.addEventListener('resize', resize);

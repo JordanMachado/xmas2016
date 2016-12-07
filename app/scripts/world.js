@@ -9,15 +9,15 @@ const world = {
         shininess: 3000,
         p: {
           x: -40,
-          y: 24,
+          y: 34,
           z: 10,
         },
-        scale: 0.08,
+        scale: 0.115,
       },
       {
         type: 'renne',
         reactive: true,
-        factor: 0.01,
+        factor: 0.0001,
         ao: false,
         shininess: 3000,
         p: {
@@ -30,7 +30,7 @@ const world = {
           y: -20,
           z: 0,
         },
-        scale: 10,
+        scale: 0.1,
       },
       {
         type: 'present',
@@ -42,6 +42,60 @@ const world = {
           x: -31,
           y: 10,
           z: 10,
+        },
+        scale: 0.08,
+      },
+      {
+        type: 'present',
+        reactive: true,
+        factor: 0.0002,
+        ao: false,
+        shininess: 3000,
+        p: {
+          x: 6,
+          y: 24,
+          z: -17,
+        },
+        r: {
+          x: -18,
+          y: 0,
+          z: 0,
+        },
+        scale: 0.14,
+      },
+      {
+        type: 'present',
+        reactive: true,
+        factor: 0.0002,
+        ao: false,
+        shininess: 3000,
+        p: {
+          x: 1,
+          y: 10,
+          z: -58,
+        },
+        r: {
+          x: 0,
+          y: 0,
+          z: 0,
+        },
+        scale: 0.08,
+      },
+      {
+        type: 'present',
+        reactive: true,
+        factor: 0.0002,
+        ao: false,
+        shininess: 3000,
+        p: {
+          x: -23,
+          y: 12,
+          z: -14,
+        },
+        r: {
+          x: 0,
+          y: 0,
+          z: 0,
         },
         scale: 0.08,
       },
@@ -101,6 +155,24 @@ const world = {
         ao: false,
         shininess: 3000,
         p: {
+          x: 24,
+          y: 33,
+          z: -48,
+        },
+        r: {
+          x: 13,
+          y: 50,
+          z: -40,
+        },
+        scale: 15,
+      },
+      {
+        type: 'candy',
+        reactive: true,
+        factor: 0.03,
+        ao: false,
+        shininess: 3000,
+        p: {
           x: -40,
           y: 15,
           z: 38,
@@ -135,10 +207,11 @@ const world = {
         reactive: true,
         factor: 0.0001,
         ao: false,
+        noCenter: true,
         shininess: 3000,
         p: {
           x: 15,
-          y: 50,
+          y: 12,
           z: 15,
         },
         r: {
@@ -146,7 +219,7 @@ const world = {
           y: 50,
           z: 0,
         },
-        scale: 0.4,
+        scale: 0.7,
       },
       {
         type: 'snowman-body',
@@ -164,7 +237,7 @@ const world = {
           y: 50,
           z: 0,
         },
-        scale: 0.4,
+        scale: 0.7,
       },
     ],
   },
@@ -186,7 +259,7 @@ const world = {
           y: -60,
           z: 0,
         },
-        follow:true,
+        follow: true,
         scale: -0.8,
       },
       {
@@ -205,7 +278,7 @@ const world = {
           y: -60,
           z: 0,
         },
-        follow:true,
+        follow: true,
         scale: -0.15,
       },
       {
@@ -215,9 +288,9 @@ const world = {
         ao: false,
         shininess: 3000,
         p: {
-          x: -13,
+          x: -9,
           y: -49,
-          z: 15,
+          z: 12,
         },
         r: {
           x: 0,
@@ -235,10 +308,10 @@ const world = {
         shininess: 3000,
         p: {
           x: 40,
-          y: -24,
+          y: -29,
           z: 10,
         },
-        scale: -2.5,
+        scale: -3.5,
       },
       {
         type: 'hand',
@@ -292,6 +365,62 @@ const world = {
         follow:true,
         scale: -1,
       },
+      {
+        type: 'hand',
+        reactive: true,
+        factor: 0.0003,
+        ao: false,
+        shininess: 3000,
+        p: {
+          x: 55,
+          y: -15,
+          z: -41,
+        },
+        r: {
+          x: 8,
+          y: 0,
+          z: 0,
+        },
+        scale: -1.8,
+      },
+      {
+        type: 'hand',
+        reactive: true,
+        factor: 0.0003,
+        ao: false,
+        shininess: 3000,
+        p: {
+          x: -24,
+          y: -33,
+          z: -48,
+        },
+        r: {
+          x: 13,
+          y: -50,
+          z: -40,
+        },
+        scale: -2.3,
+      },
+      {
+        type: 'hand',
+        reactive: true,
+        factor: 0.0003,
+        ao: false,
+        shininess: 3000,
+        p: {
+          x: 40,
+          y: -15,
+          z: 38,
+        },
+        r: {
+          x: 10,
+          y: 180,
+          z: 0,
+        },
+
+        scale: -2.0,
+      },
+
     ],
   },
 };

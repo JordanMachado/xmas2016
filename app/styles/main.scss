@@ -33,66 +33,107 @@ canvas {
 
 .intro {
   position: absolute;
-  width: 50%;
+  width: 80%;
   top: 50%;
   left: 50%;
   // background: black;
   transform: translate(-50%, -50%);
   text-align: center;
-  .loader {
+  .wrap{
     position: relative;
-    width: 80%;
     margin: 0 auto;
-    height: 50px;
-    overflow: hidden;
-    margin-top: 30px;
-    .bar {
-      position: relative;
-      height: 100%;
-      width: 100%;
-      padding: 20px;
-      box-sizing: border-box;
+    margin-top: 60px;
+    height: 60px;
+  }
+    .loader {
+      position: absolute;
+      top:50%;
+      left: 50%;
+      width: 84px;
+      margin: 0 auto;
+      height: 21px;
+      // overflow: hidden;
+      transform: translate(-50%, -50%);
       .progress {
-        position: relative;
-        background: url(../assets/snow.png);
-
+        position: absolute;
+        background-size: 100% 100%;
         height: 100%;
-        width: 0;
+        width: 0%;
+        overflow: hidden;
       }
+      .bg {
+        position: relative;
+        background: url(../assets/loader-progress.png) no-repeat;
+        background-size: 100% 100%;
+        height: 100%;
+        width: 86px;
+      }
+      .top {
+        position: absolute;
+        background: url(../assets/loader-border.png) no-repeat;
+        background-size: 100% 100%;
+        height: 100%;
+        width: 100%;
+      }
+
     }
-  }
-  .btn {
-    position: absolute;
-    cursor: pointer;
-    top:0;
-    margin: 0 auto;
-    padding: 15px;
-    color:white;
-    width: 30%;
-    left:50%;
-    opacity: 0;
-    transform: translate(-50%, 0);
-    visibility: hidden;
-  }
+    .btn {
+      position: absolute;
+      cursor: pointer;
+      padding: 15px;
+      color:white;
+      top:50%;
+      left:50%;
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      visibility: hidden;
+      font-size: 25px;
+    }
+
+
 }
 
-.space {
+.instruction {
   position: absolute;
-  height: 20px;
-  background: #4c4c4c;
-  bottom:12%;
-  left: 50%;
-  width: 150px;
-  transform: translate(-50%, -50%);
+  bottom: 10%;
+  text-align: center;
+  width: 100%;
   opacity: 0;
   visibility: hidden;
+  .space {
+    position: relative;
+    margin: 0 auto;
+    width: 81px;
+    height: 21px;
 
-  .energy {
-    background: white;
-    height: 100%;
+    .energy {
+      position: absolute;
+      background-size: 100% 100%;
+      height: 100%;
+      width: 0%;
+      overflow: hidden;
+      background: black;
+    }
+    .bg {
+      position: relative;
+      background: url(../assets/loader-progress.png) no-repeat;
+      background-size: 100% 100%;
+      height: 100%;
+      width: 86px;
+    }
+    .top {
+      position: absolute;
+      background: url(../assets/loader-border.png) no-repeat;
+      background-size: 100% 100%;
+      height: 100%;
+      width: 100%;
+    }
+
   }
 }
-
+h1 {
+  font-size: 120px;
+}
 h1, p {
   background: url(../assets/snow.png);
   -webkit-background-clip: text;
