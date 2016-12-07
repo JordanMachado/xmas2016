@@ -7,6 +7,8 @@ import Ressources from './Ressources';
 import world from './world';
 import Energy from './Energy';
 
+const RAD = Math.PI / 180;
+
 // Passes
 const FXAAPass = require('@superguigui/wagner/src/passes/fxaa/FXAAPASS');
 const VignettePass = require('@superguigui/wagner/src/passes/vignette/VignettePass');
@@ -17,6 +19,7 @@ const Glitch = require('./postProcessing/glitch/GlitchPass');
 const RGB = require('@superguigui/wagner/src/passes/rgbsplit/rgbsplit');
 // Objects
 import Skybox from './objects/Skybox';
+import JOJOTIM from './objects/JOJOTIM';
 import LightSide from './LightSide';
 import DarkSide from './DarkSide';
 import SwitchManager from './SwitchManager';
@@ -58,12 +61,13 @@ export default class WebGL {
     this.camera.rotation.x = -0.4955165012108027;
     this.camera.position.x = -60;
     this.camera.position.z = 200;
-    this.camera.position.y = 90;
+    this.camera.position.y = 110;
     this.spaceDown = false;
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(params.size.width, params.size.height);
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setClearColor(0x262626);
+    this.earth = new THREE.Group();
 
     this.lightSide = new LightSide({
       scene: this.scene,
@@ -77,11 +81,12 @@ export default class WebGL {
     });
     this.switchManager = new SwitchManager({
       scene: this.scene,
+      earth: this.earth,
       camera: this.camera,
       lightSide: this.lightSide,
       darkSide: this.darkSide,
     });
-    this.scene.rotation.y = 2;
+    this.scene.rotation.y = 0;
     this.composer = null;
     this.initPostprocessing();
     this.initLights();
@@ -90,7 +95,14 @@ export default class WebGL {
     this.controls.enabled = this.params.controls;
     this.tick = 0;
     this.energy = new Energy();
-
+    Mediator.on('konami', () => {
+      TweenLite.to(this.scene.rotation, 0.5,{
+        y: RAD * -90,
+      })
+      TweenLite.to(this.jojotim.mat, 0.5,{
+        opacity: 1,
+      })
+    })
     if (window.DEBUG || window.DEVMODE) this.initGUI();
 
   }
@@ -153,7 +165,6 @@ export default class WebGL {
     this.darkSide.initLights({ spotLights: this.spotLights });
   }
   initObjects() {
-    this.earth = new THREE.Group();
     this.earth.rotation.y = Math.PI * 2;
     this.earth.position.y = -300
     // this.earth.position.z = 200
@@ -183,6 +194,13 @@ export default class WebGL {
     /* Sides */
     this.lightSide.addObjects(this.earth);
     this.darkSide.addObjects(this.earth);
+
+    this.jojotim = new JOJOTIM();
+    this.jojotim.position.z = 20;
+    this.jojotim.position.x = 80;
+    this.jojotim.position.y = 40;
+
+    this.earth.add(this.jojotim);
     // Mediator.emit('switch')
     // setTimeout(() => {
     //   this.start();
@@ -192,17 +210,19 @@ export default class WebGL {
   }
   start() {
     TweenLite.to(this.earth.position, 1.2, {
-      y: 0,
+      y: -10,
       z: 0,
       ease: Quad.easeOut,
     });
-    TweenLite.to(this.earth.rotation, 1.2, {
-      y: 0,
+    TweenLite.to(this.scene.rotation, 1.2, {
+      y: 2,
       ease: Quad.easeOut,
       onComplete: () => {
         this.interactive = true;
       },
     });
+        // this.interactive = true;
+
     this.switchManager.start();
   }
   initGUI() {
@@ -298,12 +318,10 @@ export default class WebGL {
     this.tick += 0.01;
     this.scene.position.x = Math.cos(this.tick * 1.5);
     this.scene.position.y = Math.sin(this.tick * 2);
-    if (this.interactive) {
-      this.earth.rotation.y += ( this.mouse.x / 2 - this.earth.rotation.y ) * 0.05;
-      this.earth.rotation.z += ( this.mouse.y / 5 - this.earth.rotation.z ) * 0.05;
-      this.skybox.rotation.y = this.earth.rotation.y;
-      this.skybox.rotation.z = this.earth.rotation.z;
-    }
+    this.skybox.rotation.y += ( this.mouse.x / 2 - this.skybox.rotation.y ) * 0.05;
+    this.skybox.rotation.z += ( this.mouse.y / 5 - this.skybox.rotation.z ) * 0.05;
+    this.earth.rotation.z = this.skybox.rotation.z;
+    this.earth.rotation.y =  this.skybox.rotation.y;
 
     this.camera.lookAt( this.scene.position );
 

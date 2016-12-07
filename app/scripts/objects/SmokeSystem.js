@@ -10,8 +10,8 @@ export default class ParticleSystem extends THREE.Object3D {
   constructor({ renderer, scene }) {
     super();
 
-    const width = 72;
-    const height = 72;
+    const width = 128;
+    const height = 128;
     this.dataPos = new Float32Array(width * height * 4);
     this.datatInfos = new Float32Array(width * height * 4);
     this.geom = new THREE.BufferGeometry();

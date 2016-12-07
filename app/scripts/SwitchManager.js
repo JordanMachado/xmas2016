@@ -2,9 +2,10 @@ import Mediator from './Mediator';
 import sono from 'sono';
 
 export default class SwitchManager {
-  constructor({ scene, camera, lightSide, darkSide }) {
+  constructor({ scene, camera, lightSide, darkSide, earth }) {
     this.isLightSide = true;
     this.scene = scene;
+    this.earth = earth;
     this.camera = camera;
     this.lightSide = lightSide;
     this.darkSide = darkSide;
@@ -47,7 +48,7 @@ export default class SwitchManager {
   start() {
     this.soundLight.play();
     this.soundDark.play();
-    // this.soundLight.currentTime = 50;
+    this.soundLight.currentTime = 1;
 
   }
   events() {
@@ -71,12 +72,14 @@ export default class SwitchManager {
       this.camera.position.x = -60
 
       this.scene.rotation.y = 2;
+      this.earth.position.y = -10;
       this.noise.params.amount = 0.011;
       this.vignette.params.reduction = 1;
 
     } else {
       this.scene.rotation.y = 1;
-      this.camera.position.x = -20
+      this.camera.position.x = -20;
+      this.earth.position.y = 10;
       this.lightSide.off();
       this.darkSide.on();
       this.soundDark.fade(0.5, 0.4);
@@ -97,7 +100,7 @@ export default class SwitchManager {
     // this.soundDark.volume = transition / 2.5;
 
     this.camera.position.z = 200 - 20 * transition;
-    this.camera.position.y = 90 + (Math.random() * 10 * transition);
+    this.camera.position.y = 110 + (Math.random() * 10 * transition);
 
 
   }

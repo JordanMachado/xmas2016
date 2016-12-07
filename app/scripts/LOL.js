@@ -2,6 +2,7 @@
 * Class LOL
 * With developer mode and Konami
 */
+import Mediator from './Mediator';
 import url from 'fast-url-parser';
 url.queryString = require('querystringparser');
 import Konami from 'konami-js';
@@ -20,6 +21,7 @@ class LOL {
   }
   konami() {
     console.log('konami');
+    Mediator.emit('konami');
   }
 }
 export default new LOL();

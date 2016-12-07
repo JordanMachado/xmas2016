@@ -1,5 +1,6 @@
 export default [
   /* Common */
+  { name: 'txr-jojotim', url: './assets/jojotim.jpg' },
   { name: 'obj-planete', url: './assets/planete2.obj' },
   { name: 'txr-skybox', url: './assets/skybox.jpg' },
   /* Light side */

@@ -10,11 +10,11 @@ import Ressources from './Ressources';
 import sono from 'sono';
 
 // Vars
-window.DEBUG = true;
+window.DEBUG = false;
 let device;
 let webGL;
 
-// console.warn = function() {};
+console.warn = function() {};
 function animate() {
   raf(animate);
   webGL.render();
@@ -107,7 +107,7 @@ domReady(() => {
         },
         touch: {},
       },
-      controls: true,
+      // controls: true,
     });
 
     document.body.appendChild(webGL.renderer.domElement);
