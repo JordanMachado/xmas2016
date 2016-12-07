@@ -116,14 +116,14 @@ canvas {
     }
     .bg {
       position: relative;
-      background: url(../assets/loader-progress.png) no-repeat;
+      background: url(../assets/spacebar-progress.png) no-repeat;
       background-size: 100% 100%;
       height: 100%;
       width: 86px;
     }
     .top {
       position: absolute;
-      background: url(../assets/loader-border.png) no-repeat;
+      background: url(../assets/spacebar-border.png) no-repeat;
       background-size: 100% 100%;
       height: 100%;
       width: 100%;
@@ -138,4 +138,24 @@ h1, p {
   background: url(../assets/snow.png);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+.credits {
+  position: absolute;
+  bottom: 0;
+  padding: 20px;
+  font-size: 12px;
+  font-family: 'Permanent Marker', cursive;
+  color:#434343;
+  opacity: 0;
+  visibility: hidden;
+  a {
+    text-decoration: none;
+    color:#434343;
+    transition: color 0.5s;
+
+    &:hover {
+      color:#bfbfbf;
+    }
+
+  }
 }

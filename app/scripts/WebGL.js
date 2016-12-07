@@ -115,9 +115,10 @@ export default class WebGL {
     this.switchManager.vignette = this.vignettePass;
 
     this.rgb = new RGB({});
+    this.rgb.params.delta.x = 0;
+    this.rgb.params.delta.y = 0;
     this.switchManager.rgb = this.rgb;
 
-   this.rgb.params.delta = new THREE.Vector2(50, 50);
    this.rgb.params.brightness = 1.05;
    this.passes.push(this.rgb);
   //  this.rgb.enabled = false;

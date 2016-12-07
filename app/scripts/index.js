@@ -82,6 +82,7 @@ domReady(() => {
   const loaderEl = document.querySelector('.loader');
   const progressEl = document.querySelector('.loader .progress');
   const instructionEl = document.querySelector('.instruction');
+  const creditEl = document.querySelector('.credits');
   Ressources.on('load:progress', (loader) => {
     progressEl.style.width = `${loader.progress}%`;
   });
@@ -119,6 +120,10 @@ domReady(() => {
       TweenLite.to(instructionEl, 1.5, {
         autoAlpha: 1,
       });
+      TweenLite.to(creditEl, 1.5, {
+        autoAlpha: 1,
+      });
+
 
     });
     //
