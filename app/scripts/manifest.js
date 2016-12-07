@@ -36,6 +36,7 @@ export default [
   { name: 'txr-snowman-body', url: './assets/snowman/txr/body.jpg' },
 
   { name: 'txr-cadeau-ao', url: './assets/ao-cadeau.jpg' },
+  { name: 'txr-fire', url: './assets/fire.png' },
   { name: 'txr-smoke', url: './assets/smoke.png' },
   { name: 'txr-applat', url: './assets/applat.jpg' },
   { name: 'txr-ao', url: './assets/ao-small.jpg' },

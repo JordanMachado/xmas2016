@@ -20,7 +20,12 @@ export default class ReactiveObject extends THREE.Object3D {
           child.material.aoMap.needsUpdate = true;
           child.material.aoMapIntensity = obj.aoMapIntensity;
         }
-        child.geometry.center();
+        if (obj.noCenter) {
+
+        } else {
+          child.geometry.center();
+
+        }
         child.geometry.computeFaceNormals();
         child.geometry.computeVertexNormals();
       }
@@ -50,10 +55,10 @@ export default class ReactiveObject extends THREE.Object3D {
          Math.abs(obj.scale)
        );
        if (obj.type === 'hand') {
-         this.object.rotation.y = RAD * -total/2;
+        //  this.object.rotation.y = RAD * -total / 2;
        }
         if (obj.type === 'skull-head-bottom') {
-          this.object.position.y = this.object.oposition.y +  total/40;
+          this.object.position.y = this.object.oposition.y + total / 40;
         }
        });
     } else {
@@ -64,8 +69,9 @@ export default class ReactiveObject extends THREE.Object3D {
        );
         if (obj.type === 'snowman-head') {
           this.tick += 0.1;
-          object.rotation.z = Math.sin(this.tick + total * 0.05) * RAD * 10;
-          // object.rotation.z = Math.sin(this.tick  ) * RAD * 10;
+          // object.rotation.z = Math.sin(this.tick + total * 0.05) * RAD * 4;
+          object.rotation.x = Math.sin(this.tick) * RAD * 2;
+          object.rotation.z = Math.cos(this.tick) * RAD * 2;
         }
       });
     }

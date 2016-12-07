@@ -81,7 +81,7 @@ export default class WebGL {
       lightSide: this.lightSide,
       darkSide: this.darkSide,
     });
-    this.scene.rotation.y = 2
+    this.scene.rotation.y = 2;
     this.composer = null;
     this.initPostprocessing();
     this.initLights();
@@ -178,6 +178,7 @@ export default class WebGL {
     /* Common */
     this.skybox = new Skybox();
     this.scene.add(this.skybox);
+    // this.earth.add(this.skybox);
     /* Sides */
     this.lightSide.addObjects(this.earth);
     this.darkSide.addObjects(this.earth);
@@ -297,8 +298,10 @@ export default class WebGL {
     this.scene.position.x = Math.cos(this.tick * 1.5);
     this.scene.position.y = Math.sin(this.tick * 2);
     if (this.interactive) {
-      this.earth.rotation.y += ( this.mouse.x/2 - this.earth.rotation.y ) * 0.05;
-      this.earth.rotation.z += ( this.mouse.y/5 - this.earth.rotation.z ) * 0.05;
+      this.earth.rotation.y += ( this.mouse.x / 2 - this.earth.rotation.y ) * 0.05;
+      this.earth.rotation.z += ( this.mouse.y / 5 - this.earth.rotation.z ) * 0.05;
+      this.skybox.rotation.y = this.earth.rotation.y;
+      this.skybox.rotation.z = this.earth.rotation.z;
     }
 
     this.camera.lookAt( this.scene.position );
@@ -353,7 +356,7 @@ export default class WebGL {
     // console.log(e.keyCode);
     if (e.keyCode === 32) {
       this.spaceDown = false;
-      // if (this.energy.activate)
+      if (this.energy.activate)
         Mediator.emit('switch');
 
       this.energy.release();

@@ -1,5 +1,6 @@
 const THREE = require('three');
 import SmokeSystem from './objects/SmokeSystem';
+import FireSystem from './objects/FireSystem';
 import ReactiveObject from './objects/ReactiveObject';
 
 export default class DarkSide {
@@ -32,9 +33,24 @@ export default class DarkSide {
       scene: this.scene,
       renderer: this.renderer,
     });
+    this.fireSystem = new FireSystem({
+      scene: this.scene,
+      renderer: this.renderer,
+      alpha: 1,
+    });
+    this.fireSystem.position.set(-15, -25, 20);
+    this.fireSystem2 = new FireSystem({
+      scene: this.scene,
+      renderer: this.renderer,
+      alpha: 0.5,
+    });
+    this.fireSystem2.position.set(40, 0, 10);
+
 
     // this.smokeSystem.position.set(40, 5, 10);
     ctn.add(this.smokeSystem);
+    ctn.add(this.fireSystem);
+    ctn.add(this.fireSystem2);
 
     for (let i = 0; i < this.config.objects.length; i++) {
       const obj = this.config.objects[i];
@@ -62,6 +78,8 @@ export default class DarkSide {
   }
   update() {
     this.smokeSystem.update();
+    this.fireSystem.update();
+    this.fireSystem2.update();
 
   }
 }
