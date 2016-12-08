@@ -38,6 +38,7 @@ canvas {
   left: 50%;
   // background: black;
   transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
   text-align: center;
   z-index: 2;
 
