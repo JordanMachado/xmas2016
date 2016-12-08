@@ -80,12 +80,14 @@ domReady(() => {
   const title = document.querySelector('.intro h1');
   const start = document.querySelector('.btn');
   const loaderEl = document.querySelector('.loader');
+  const headphoneEl = document.querySelector('.headphone');
   const progressEl = document.querySelector('.loader .progress');
   const instructionEl = document.querySelector('.instruction');
   const creditEl = document.querySelector('.credits');
   TweenLite.set(title, { y: -20 });
   TweenLite.set(loaderEl, { y: -30 });
   TweenLite.set(start, { y: -20 });
+  TweenLite.set(headphoneEl, { y: -20 });
   TweenLite.to(title, 0.8, {
     y: 0,
     autoAlpha: 1,
@@ -94,6 +96,16 @@ domReady(() => {
       Ressources.load(manifest);
     },
   });
+  TweenLite.to(headphoneEl, 0.8, {
+    y: 0,
+    autoAlpha: 1,
+    delay: 0.5,
+    ease: Quad.easeOut,
+    onComplete: () => {
+    },
+  });
+
+
   TweenLite.to(loaderEl, 0.8, {
     y: '-50%',
     autoAlpha: 1,
@@ -150,6 +162,10 @@ domReady(() => {
         });
       });
       TweenLite.to(intro, 0.5, {
+        autoAlpha: 0,
+        ease: Quad.easeIn,
+      });
+      TweenLite.to(headphoneEl, 0.5, {
         autoAlpha: 0,
         ease: Quad.easeIn,
       });

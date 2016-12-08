@@ -1,6 +1,6 @@
 export default [
   /* Common */
-  { name: 'txr-jojotim', url: './assets/txr/jojotim.jpg' },
+  { name: 'txr-jojotim', url: './assets/txr/floor.jpg' },
   { name: 'obj-planete', url: './assets/obj/planete.obj' },
   { name: 'txr-skybox', url: './assets/txr/skybox.jpg' },
   /* Light side */
@@ -43,6 +43,7 @@ export default [
   /* Dark side */
   { name: 'obj-dead-three', url: './assets/obj/dead-three.obj' },
   { name: 'txr-dead-three', url: './assets/txr/dead-three.jpg' },
+
 
 
 ];
