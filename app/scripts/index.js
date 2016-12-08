@@ -71,18 +71,35 @@ domReady(() => {
     loop: true,
   });
   sound.play();
-  Ressources.load(manifest);
 
   if (window.DEBUG || window.DEVMODE) {
     window.gui = new dat.GUI();
   }
 
   const intro = document.querySelector('.intro');
+  const title = document.querySelector('.intro h1');
   const start = document.querySelector('.btn');
   const loaderEl = document.querySelector('.loader');
   const progressEl = document.querySelector('.loader .progress');
   const instructionEl = document.querySelector('.instruction');
   const creditEl = document.querySelector('.credits');
+  TweenLite.set(title, { y: -20 });
+  TweenLite.set(loaderEl, { y: -30 });
+  TweenLite.set(start, { y: -20 });
+  TweenLite.to(title, 0.8, {
+    y: 0,
+    autoAlpha: 1,
+    ease: Quad.easeOut,
+    onComplete: () => {
+      Ressources.load(manifest);
+    },
+  });
+  TweenLite.to(loaderEl, 0.8, {
+    y: '-50%',
+    autoAlpha: 1,
+    ease: Quad.easeOut,
+    delay: 0.3,
+  });
   Ressources.on('load:progress', (loader) => {
     progressEl.style.width = `${loader.progress}%`;
   });
@@ -105,36 +122,49 @@ domReady(() => {
         mouse: {
           move: true,
         },
-        touch: {},
+        touch: {
+          move: true,
+        },
       },
       // controls: true,
     });
 
     document.body.appendChild(webGL.renderer.domElement);
     start.addEventListener('click', () => {
-      sound.fade(0, 0.4);
-      webGL.start();
-      TweenLite.to(intro, 1.5, {
+      TweenLite.delayedCall(0.5, () => {
+        sound.fade(0, 0.4);
+        webGL.start();
+        TweenLite.set(instructionEl, { y: 20 });
+        TweenLite.set(creditEl, { y: 20 });
+        TweenLite.to(instructionEl, 1.2, {
+          y: 0,
+          autoAlpha: 1,
+          delay: 0.7,
+          ease: Quad.easeOut,
+        });
+        TweenLite.to(creditEl, 1.2, {
+          y: 0,
+          autoAlpha: 1,
+          delay: 1.3,
+          ease: Quad.easeOut,
+        });
+      });
+      TweenLite.to(intro, 0.5, {
         autoAlpha: 0,
+        ease: Quad.easeIn,
       });
-      TweenLite.to(instructionEl, 1.5, {
-        autoAlpha: 1,
-      });
-      TweenLite.to(creditEl, 1.5, {
-        autoAlpha: 1,
-      });
-
-
     });
     //
-    TweenLite.to(loaderEl, 0.5, {
+    TweenLite.to(loaderEl, 0.8, {
+      y: 20,
       autoAlpha: 0,
       ease: Quad.easeIn,
       delay: 1,
     });
-    TweenLite.to(start, 2.5, {
+    TweenLite.to(start, 0.8, {
+      y: '-50%',
       autoAlpha: 1,
-      delay: 1.6,
+      delay: 1.7,
       ease: Quad.easeOut,
     });
     TweenLite.to(webGL.renderer.domElement, 2, {

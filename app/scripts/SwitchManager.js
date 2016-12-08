@@ -2,13 +2,14 @@ import Mediator from './Mediator';
 import sono from 'sono';
 
 export default class SwitchManager {
-  constructor({ scene, camera, lightSide, darkSide, earth }) {
+  constructor({ scene, camera, lightSide, darkSide, earth, device }) {
     this.isLightSide = true;
     this.scene = scene;
     this.earth = earth;
     this.camera = camera;
     this.lightSide = lightSide;
     this.darkSide = darkSide;
+    this.device = device;
     this.events();
     this.sounds();
 
@@ -94,7 +95,11 @@ export default class SwitchManager {
     this.rgb.params.delta.y = Math.random() * 140 * transition;
     this.glitch.intensity = 0.1 * transition;
     this.echo.feedback = 0.9 * transition;
-    this.vignette.params.reduction = 1 + transition * 1.4;
+    if (this.device === 'phone') {
+      this.vignette.params.reduction = 0.5 + transition * 1.0;
+    } else {
+      this.vignette.params.reduction = 1 + transition * 1.4;
+    }
 
     this.soundLight.playbackRate = 1 - transition / 5;
     // this.soundDark.volume = transition / 2.5;

@@ -66,6 +66,7 @@ export default class WebGL {
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(params.size.width, params.size.height);
     this.renderer.setPixelRatio(window.devicePixelRatio);
+    // this.renderer.setPixelRatio(2);
     this.renderer.setClearColor(0x262626);
     this.earth = new THREE.Group();
 
@@ -85,6 +86,7 @@ export default class WebGL {
       camera: this.camera,
       lightSide: this.lightSide,
       darkSide: this.darkSide,
+      device: this.params.device,
     });
     this.scene.rotation.y = 0;
     this.composer = null;
@@ -94,15 +96,15 @@ export default class WebGL {
     this.controls = new OrbitControls(this.camera);
     this.controls.enabled = this.params.controls;
     this.tick = 0;
-    this.energy = new Energy();
+    this.energy = new Energy(this.params.device);
     Mediator.on('konami', () => {
-      TweenLite.to(this.scene.rotation, 0.5,{
+      TweenLite.to(this.scene.rotation, 0.5, {
         y: RAD * -90,
-      })
-      TweenLite.to(this.jojotim.mat, 0.5,{
+      });
+      TweenLite.to(this.jojotim.mat, 0.5, {
         opacity: 1,
-      })
-    })
+      });
+    });
     if (window.DEBUG || window.DEVMODE) this.initGUI();
 
   }
@@ -123,6 +125,7 @@ export default class WebGL {
     this.passes.push(this.noisePass);
 
     this.vignettePass = new VignettePass({});
+    this.vignettePass.params.reduction = this.params.device === 'desktop' ? 1 : 0.5;
     this.passes.push(this.vignettePass);
     this.switchManager.vignette = this.vignettePass;
 
@@ -395,6 +398,12 @@ export default class WebGL {
   }
   touchStart() {}
   touchEnd() {}
-  touchMove() {}
+  touchMove(touches) {
+    const touch = touches[0];
+    this.originalMouse.x = touch.clientX;
+    this.originalMouse.y = touch.clientY;
+    this.mouse.x = (touch.clientX / window.innerWidth - 0.5) * 2;
+    this.mouse.y = (touch.clientY / window.innerHeight - 0.5) * 2;
+  }
 
 }

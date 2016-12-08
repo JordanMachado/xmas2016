@@ -1,7 +1,34 @@
 import Mediator from './Mediator';
 
 export default class Energy {
-  constructor () {
+  constructor(device) {
+    if (device !== 'desktop') {
+      const touch = document.querySelector('.touchzone');
+      touch.addEventListener('touchstart', () => {
+        TweenLite.to(this, 2.0, {
+          value: 5,
+          onUpdate: () => {
+            const ratio = Math.abs(this.value / this.max);
+            const r = (ratio) - 1.0;
+            const value = r * r * r + 1.0;
+            this.el.style.width = `${value * 100}%`;
+            Mediator.emit('energy:charge', ratio);
+          },
+          onComplete: () => {
+            Mediator.emit('switch');
+            this.activate = true;
+          },
+        });
+      });
+      touch.addEventListener('touchend', () => {
+        TweenLite.killTweensOf(this);
+        if (this.activate) {
+          Mediator.emit('switch');
+        }
+        this.release();
+      });
+      // window.
+    }
     this.value = 0;
     this.activate = false;
     this.max = 5;
@@ -32,6 +59,7 @@ export default class Energy {
   }
   release() {
     this.animating = true;
+    TweenLite.killTweensOf(this)
     TweenLite.to(this, 0.5, {
       value: 0,
       onUpdate: () => {

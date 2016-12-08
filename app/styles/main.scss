@@ -1,4 +1,4 @@
-body {
+html, body {
   position: absolute;
   margin: 0;
   padding: 0;
@@ -28,7 +28,7 @@ canvas {
   position: absolute;
   visibility: hidden;
   opacity: 0;
-  z-index: -1;
+  z-index: 1;
 }
 
 .intro {
@@ -39,6 +39,8 @@ canvas {
   // background: black;
   transform: translate(-50%, -50%);
   text-align: center;
+  z-index: 2;
+
   .wrap{
     position: relative;
     margin: 0 auto;
@@ -54,6 +56,8 @@ canvas {
       height: 21px;
       // overflow: hidden;
       transform: translate(-50%, -50%);
+      opacity: 0;
+      visibility: hidden;
       .progress {
         position: absolute;
         background-size: 100% 100%;
@@ -63,14 +67,14 @@ canvas {
       }
       .bg {
         position: relative;
-        background: url(../assets/loader-progress.png) no-repeat;
+        background: url(../assets/img/loader-progress.png) no-repeat;
         background-size: 100% 100%;
         height: 100%;
         width: 86px;
       }
       .top {
         position: absolute;
-        background: url(../assets/loader-border.png) no-repeat;
+        background: url(../assets/img/loader-border.png) no-repeat;
         background-size: 100% 100%;
         height: 100%;
         width: 100%;
@@ -86,8 +90,12 @@ canvas {
       left:50%;
       opacity: 0;
       transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
       visibility: hidden;
       font-size: 25px;
+      .phone & {
+        font-size: 18px;
+      }
     }
 
 
@@ -100,11 +108,22 @@ canvas {
   width: 100%;
   opacity: 0;
   visibility: hidden;
+  z-index: 2;
+
   .space {
     position: relative;
     margin: 0 auto;
     width: 81px;
     height: 21px;
+
+    .touchzone {
+      position: absolute;
+      opacity: 0.5;
+      top: -40px;
+      left: -200%;
+      width: 500%;
+      height: 100px;
+    }
 
     .energy {
       position: absolute;
@@ -116,14 +135,14 @@ canvas {
     }
     .bg {
       position: relative;
-      background: url(../assets/spacebar-progress.png) no-repeat;
+      background: url(../assets/img/spacebar-progress.png) no-repeat;
       background-size: 100% 100%;
       height: 100%;
       width: 86px;
     }
     .top {
       position: absolute;
-      background: url(../assets/spacebar-border.png) no-repeat;
+      background: url(../assets/img/spacebar-border.png) no-repeat;
       background-size: 100% 100%;
       height: 100%;
       width: 100%;
@@ -133,9 +152,17 @@ canvas {
 }
 h1 {
   font-size: 120px;
+  .tablet & {
+    font-size: 80px;
+  }
+  .phone & {
+    font-size: 40px;
+  }
 }
-h1, p {
-  background: url(../assets/snow.png);
+h1, .intro p {
+  opacity: 0;
+  visibility: hidden;
+  background: url(../assets/img/snow.jpg);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -148,6 +175,7 @@ h1, p {
   color:#434343;
   opacity: 0;
   visibility: hidden;
+  z-index: 2;
   a {
     text-decoration: none;
     color:#434343;
@@ -157,5 +185,15 @@ h1, p {
       color:#bfbfbf;
     }
 
+  }
+}
+.desktop {
+  .touch {
+    display: none;
+  }
+}
+.tablet, .phone {
+  .no-touch {
+    display: none;
   }
 }
