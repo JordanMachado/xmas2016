@@ -27,6 +27,8 @@ html, body {
 canvas {
   position: absolute;
   visibility: hidden;
+  top:0;
+  left:0;
   opacity: 0;
   z-index: 1;
 }
@@ -42,8 +44,8 @@ canvas {
   text-align: center;
   z-index: 2;
   h1 {
-    filter: url("#squiggly-0");
-    
+    // filter: url("#squiggly-0");
+
   }
 
   .wrap{
