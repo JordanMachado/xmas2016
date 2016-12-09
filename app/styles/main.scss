@@ -43,7 +43,15 @@ canvas {
   -webkit-transform: translate(-50%, -50%);
   text-align: center;
   z-index: 2;
-  h1 {
+  .title {
+    visibility: hidden;
+    opacity: 0;
+    margin: 0 auto;
+    width: 80%;
+    height: 150px;
+    background: url(../assets/img/title.png) no-repeat;
+    background-size: contain;
+    background-position: center center;
     // filter: url("#squiggly-0");
 
   }

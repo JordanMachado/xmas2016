@@ -77,7 +77,7 @@ domReady(() => {
   }
 
   const intro = document.querySelector('.intro');
-  const title = document.querySelector('.intro h1');
+  const title = document.querySelector('.title');
   const start = document.querySelector('.btn');
   const loaderEl = document.querySelector('.loader');
   const headphoneEl = document.querySelector('.headphone');
