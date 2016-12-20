@@ -1,5 +1,11 @@
-threejs-starter
+Christmax experiment 2016
 ===================
+My contribution for [christmas experiments 2016](http://christmasexperiments.com/)
+
+Demo available [here](http://christmasexperiments.com/2016/11/skull-santa/).
+
+![Alt text](http://jojo.ninja/share/skull-santa.jpg "skullsanta")
+
 
 NODE: 6.3.0
 
